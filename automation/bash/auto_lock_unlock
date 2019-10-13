@@ -1,0 +1,195 @@
+#!/bin/bash
+#
+# This program is to automate locking/unlocking the lockscreen of android devices,
+# which is a sort of a test giving stress to locksettings service.
+#
+# Author  : Truman 
+# Contact : truman.t.kim@gmail.com
+# Version : 1.0.0 
+#
+#
+# [ Fixed Constants ]
+PROG_NAME="auto_lock_unlock"
+PROG_VERS="1.0.0"
+DEBUG_FUNC=0
+#DEBUG_FUNC=1
+
+# [ Providable Variables ]
+USER_PWD=""
+
+# [ Active Variables ]
+LAST_RESULT=""
+REPS=0
+START_TIME=""
+FINISH_TIME=""
+
+# [ Functions ]
+function usage() {
+    echo
+    echo "[$PROG_NAME]"
+    echo
+    echo "Version : $PROG_VERS"
+    echo
+    echo "Usage: $PROG_NAME [-h] -p PASSWORD"
+    echo
+    echo "PASSWORD can be empty so as to test Swipe type of lockscreen,"
+    echo "on the other hand None type is not available."
+    echo
+}
+
+function get_time() {
+    echo $(date '+%Y-%m-%d %H:%M:%S')
+}
+
+function log() {
+    echo $(get_time) [ $PROG_NAME ] "$@"
+}
+
+function debug() {
+    if [ $DEBUG_FUNC == 1 ]; then
+        echo $(log ":: DEBUG ::" "$@")
+    fi
+}
+
+function wait_for_device() {
+    echo "Wait for device connected..."
+    adb wait-for-device
+    echo "Device connected!"
+}
+
+function swipe_screen_ltor() {
+    debug "Swipe screen from left to right"
+    adb shell input swipe 100 1500 1200 1500
+}
+
+function swipe_screen_rtol() {
+    debug "Swipe screen from right to left"
+    adb shell input swipe 1200 1500 1200 100
+}
+
+function push_power_btn() {
+    debug "Push power button"
+    adb shell input keyevent KEYCODE_POWER
+}
+
+function get_screen_state() {
+    local state=$(adb shell dumpsys display | grep "mScreenState=")
+    if [[ $state == *"ON"* ]]; then
+        LAST_RESULT="ON"
+    elif [[ $state == *"OFF"* ]]; then
+        LAST_RESULT="OFF"
+    else
+        LAST_RESULT="No Response"
+    fi
+    echo $LAST_RESULT
+}
+
+function is_screen_on() {
+    if [[ $(get_screen_state) == "ON" ]]; then
+        LAST_RESULT="TRUE"
+    else
+        LAST_RESULT="FALSE"
+    fi
+    echo $LAST_RESULT 
+}
+
+function lock_screen() {
+    while [[ $(is_screen_on) == "TRUE" ]]
+    do
+        log "Turn off the screen to lock your device"
+        push_power_btn
+        sleep 3
+    done
+    while [[ $(is_screen_on) == "FALSE" ]]
+    do
+        log "Turn on the screen to come into lockscreen"
+        push_power_btn
+        sleep 3
+    done
+}
+
+function unlock_screen() {
+    log "Swipe the screen"
+    swipe_screen_ltor
+    sleep 3
+
+    log "Unlock the screen"
+    if [ -z $USER_PWD ]; then
+        debug "Skip to input user password due to no password given"
+    else
+        debug "Input user password :" $USER_PWD
+        adb shell input text $USER_PWD
+        adb shell input keyevent KEYCODE_ENTER
+        sleep 2
+    fi
+}
+
+function print_and_inc_reps() {
+    let REPS++
+    log ">> Res #$REPS" 
+}
+
+function parse_args() {
+    local prev_opt=""
+    local valid_opt=0
+
+    for i in $@
+    do
+        if [[ $prev_opt == "-p" ]]; then
+            USER_PWD=$i
+            prev_opt=""
+            continue
+        fi
+        case $i in
+            -h)
+                usage
+                exit 1
+                ;;
+            -p)
+                prev_opt=$i
+                valid_opt=1
+                USER_PWD=""
+                ;;
+        esac
+    done
+
+    if [[ valid_opt -eq 0 ]]; then
+        usage
+        exit 1
+    fi
+}
+
+function on_trapped() {
+    FINISH_TIME=$(get_time)
+    echo
+    echo "Program terminated..."
+    echo
+    echo "Final Reps  : #$REPS"
+    echo "Start Time  : $START_TIME"
+    echo "Finish Time : $FINISH_TIME"
+    echo
+    echo "Good bye :-)"
+    exit 1
+}
+
+function main() {
+
+    # Start of MAIN
+    trap on_trapped INT 
+    wait_for_device
+    parse_args $@
+
+    START_TIME=$(get_time)
+
+    while :
+    do
+        print_and_inc_reps
+        lock_screen
+        unlock_screen
+    done
+    # End of MAIN
+
+}
+
+# Main Script
+main $@
