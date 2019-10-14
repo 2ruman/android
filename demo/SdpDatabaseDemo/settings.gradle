@@ -1,0 +1,2 @@
+include ':app', ':knoxsdk'
+rootProject.name='SdpDatabaseDemo'

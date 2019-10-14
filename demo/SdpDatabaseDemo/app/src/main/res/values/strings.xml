@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">SdpDatabaseDemo</string>
+    <string name="sdp_control">SDP Control</string>
+    <string name="db_control">Database Control</string>
+    <string name="num_of_data"># of Data</string>
+    <string name="interval">Interval(sec)</string>
+    <string name="insert">Insert</string>
+    <string name="select">Select</string>
+    <string name="delete">Delete</string>
+    <string name="go">Go</string>
+    <string name="stop">Stop</string>
+    <string name="dump">Dump</string>
+    <string name="na">N/A</string>
+    <string name="status">Status</string>
+    <string name="lock">Lock</string>
+    <string name="locked">Locked</string>
+    <string name="unlock">Unlock</string>
+    <string name="unlocked">Unlocked</string>
+</resources>
