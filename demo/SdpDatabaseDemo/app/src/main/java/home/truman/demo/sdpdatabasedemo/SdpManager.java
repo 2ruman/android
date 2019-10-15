@@ -27,6 +27,7 @@ public class SdpManager {
     public static final String EXTRA_SDP_ENGINE_ID = SdpEngineConstants.Intent.EXTRA_SDP_ENGINE_ID;
     public static final String EXTRA_SDP_ENGINE_STATE = SdpEngineConstants.Intent.EXTRA_SDP_ENGINE_STATE;
     public static final String ACTION_SDP_STATE_CHANGED = SdpEngineConstants.Intent.ACTION_SDP_STATE_CHANGED;
+    public static final String ACTION_SDP_REMOVE_ENGINE = "truman.demo.sdp.action.SDP_REMOVE_ENGINE";
 
     public static final int STATE_NA = 0;
     public static final int STATE_LOCKED = SdpEngineConstants.State.LOCKED;
@@ -57,6 +58,10 @@ public class SdpManager {
                 Log.e(TAG, "init() - Failed to init engine instance");
                 break;
             }
+            if (!prepareEngine()) {
+                Log.e(TAG, "init() - Failed to prepare engine");
+                break;
+            }
             if (getDatabase() == null) {
                 Log.e(TAG, "init() - Failed to init database instance");
                 break;
@@ -68,12 +73,12 @@ public class SdpManager {
         return initialized;
     }
 
-    public boolean prepare() {
-        boolean result = false;
-        if (!isInitialized()) {
-            return result;
+    private boolean prepareEngine() {
+        if (getEngine() == null) {
+            return false;
         }
 
+        boolean result = false;
         if (result = getEngine().exists(DEFAULT_ENGINE_ALIAS)) {
             Log.d(TAG, "prepare() - Engine already exist! [ " + DEFAULT_ENGINE_ALIAS + " ]");
         } else {
@@ -107,7 +112,7 @@ public class SdpManager {
             e.printStackTrace();
         }
 
-        if (result = (info == null && info.getState() == SdpEngineConstants.State.LOCKED)) {
+        if (result = (info != null && info.getState() == SdpEngineConstants.State.LOCKED)) {
             Log.d(TAG, "lock() - Engine is already unlocked");
             // return result;
         }
@@ -135,7 +140,7 @@ public class SdpManager {
             e.printStackTrace();
         }
 
-        if (result = (info == null && info.getState() == SdpEngineConstants.State.UNLOCKED)) {
+        if (result = (info != null && info.getState() == SdpEngineConstants.State.UNLOCKED)) {
             Log.d(TAG, "unlock() - Engine is already unlocked");
             // return result;
         }
@@ -144,6 +149,18 @@ public class SdpManager {
             result = true;
         } catch (SdpException e) {
             Log.e(TAG, "unlock() - Failed to unlock engine : " + e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public boolean remove() {
+        boolean result = false;
+        try {
+            getEngine().removeEngine(DEFAULT_ENGINE_ALIAS);
+            result = true;
+        } catch (SdpException e) {
+            Log.e(TAG, "remove() - Failed to remove engine : " + e.getMessage());
             e.printStackTrace();
         }
         return result;

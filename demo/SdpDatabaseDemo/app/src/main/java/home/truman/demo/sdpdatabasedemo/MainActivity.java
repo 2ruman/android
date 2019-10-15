@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference;
 /**
  * Author  : Truman
  * Contact : truman.t.kim@gmail.com
- * Version : 1.0.0
+ * Version : 1.1.1
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -85,12 +85,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy()");
-        mSdpDbHandler.close();
+        if (mSdpDbHandler != null) {
+            mSdpDbHandler.close();
+        }
     }
 
     private boolean init() {
         mSdpManager = new SdpManager();
-        if (!mSdpManager.init() || !mSdpManager.prepare()) {
+        if (!mSdpManager.init()) {
             return false;
         }
 
@@ -207,8 +209,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             insertCnt = Integer.parseInt(mEtDataNum.getText().toString());
         } catch(Exception e) {
-            Log.e(TAG, "Failed to get data number...");
-            e.printStackTrace();
+            Log.e(TAG, "Failed to get data number... maybe due to number format exception");
+            // e.printStackTrace();
         }
         if (insertCnt < 1 || insertCnt > AppConstants.MAX_INSERT_DATA_NUM) {
             insertCnt = AppConstants.DEFAULT_INSERT_DATA_NUM;
@@ -287,8 +289,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             mIntervalTime = Integer.parseInt(mEtInterval.getText().toString());
         } catch(Exception e) {
-            Log.e(TAG, "Failed to get interval time...");
-            e.printStackTrace();
+            Log.e(TAG, "Failed to get interval time... maybe due to number format exception");
+            // e.printStackTrace();
         }
         if (mIntervalTime < 1 || mIntervalTime > AppConstants.MAX_INTERVAL_TIME) {
             mIntervalTime = AppConstants.DEFAULT_INTERVAL_TIME;
@@ -470,21 +472,28 @@ public class MainActivity extends AppCompatActivity {
 
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SdpManager.ACTION_SDP_STATE_CHANGED);
+        intentFilter.addAction(SdpManager.ACTION_SDP_REMOVE_ENGINE);
 
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(TAG, "onReceive() - ACTION_SDP_STATE_CHANGED");
-                int engineId = intent.getIntExtra(SdpManager.EXTRA_SDP_ENGINE_ID, -1);
-                int engineState = intent.getIntExtra(SdpManager.EXTRA_SDP_ENGINE_STATE, SdpManager.STATE_NA);
-                if (engineId >= 0 && mSdpManager.getId() == engineId) {
-                    Log.d(TAG, "onReceive - Engine ID    : " + engineId);
-                    Log.d(TAG, "onReceive - Engine State : " + engineState);
+                if (SdpManager.ACTION_SDP_STATE_CHANGED.equals(intent.getAction())) {
+                    Log.d(TAG, "onReceive() - ACTION_SDP_STATE_CHANGED");
+                    int engineId = intent.getIntExtra(SdpManager.EXTRA_SDP_ENGINE_ID, -1);
+                    int engineState = intent.getIntExtra(SdpManager.EXTRA_SDP_ENGINE_STATE, SdpManager.STATE_NA);
+                    if (engineId >= 0 && mSdpManager.getId() == engineId) {
+                        Log.d(TAG, "onReceive - Engine ID    : " + engineId);
+                        Log.d(TAG, "onReceive - Engine State : " + engineState);
 
-                    boolean result = mSdpManager.updateStateToDB(mSdpDbHandler.getDB(), engineState);
-                    Log.d(TAG, "onReceive() - updateStateToDB() : " + result);
-                } else {
-                    Log.d(TAG, "onReceive - Invalid Engine ID : " + engineId);
+                        boolean result = mSdpManager.updateStateToDB(mSdpDbHandler.getDB(), engineState);
+                        Log.d(TAG, "onReceive() - updateStateToDB() : " + result);
+                    } else {
+                        Log.d(TAG, "onReceive - Invalid Engine ID : " + engineId);
+                    }
+                } else if (SdpManager.ACTION_SDP_REMOVE_ENGINE.equals(intent.getAction())) {
+                    Log.d(TAG, "onReceive() - ACTION_SDP_REMOVE_ENGINE");
+                    boolean result = mSdpManager.remove();
+                    Log.d(TAG, "onReceive - engine removed! : " + result);
                 }
             }
         };
