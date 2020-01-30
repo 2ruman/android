@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- Truman added
+{ -->
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorYellow">#EAD61C</color>
+    <color name="colorGreen">#0BFF01</color>
+    <color name="colorRed">#FE0000</color>
+    <color name="colorBeige">#F3E0DB</color>
+    <color name="colorCobaltBlue">#00498C</color>
+    <color name="colorEmeraldGreen">#008D62</color>
+    <color name="colorBushBrown">#464646</color> <!-- Mylands of London Shepherds Bush Brown -->
+    <color name="colorGreyScale">#474747</color>
+    <color name="colorUltraMarine">#0099A4</color>
+<!--
+} -->
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+</resources>

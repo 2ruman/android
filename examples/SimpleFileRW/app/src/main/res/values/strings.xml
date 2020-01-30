@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">SimpleFileRW</string>
+<!-- Truman added
+{ -->
+    <string name="input_data">Input Data</string>
+    <string name="default_data">This is a test file!</string>
+    <string name="result">Result</string>
+    <string name="read">Read</string>
+    <string name="write">Write</string>
+    <string name="silent">Silent</string>
+    <string name="append">Append</string>
+<!--
+} -->
+</resources>

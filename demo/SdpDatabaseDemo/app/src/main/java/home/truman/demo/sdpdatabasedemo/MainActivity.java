@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate()");
 
+        android.os.Process.myTid();
         if (!init()) {
             Log.e(TAG, "onCreate() - Failed to initialize app");
             Toast.makeText(this.getApplicationContext(),
