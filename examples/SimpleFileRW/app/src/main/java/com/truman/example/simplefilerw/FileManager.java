@@ -9,11 +9,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
-/**
- * Author  : Truman
- * Contact : truman.t.kim@gmail.com
- * Version : 1.0.0
- */
 public class FileManager {
 
     private static final String TAG_SUFFIX = ".2ruman"; // For grep
