@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +17,7 @@ import java.lang.ref.WeakReference;
 /**
  * Author  : Truman
  * Contact : truman.t.kim@gmail.com
- * Version : 1.0.1
+ * Version : 1.0.2
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mTvStatus = findViewById(R.id.tv_status);
+        mTvStatus.setMovementMethod(new ScrollingMovementMethod());
     }
 
     private void run() {
