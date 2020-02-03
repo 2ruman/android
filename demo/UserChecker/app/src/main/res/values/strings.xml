@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">UserChecker</string>
+    <string name="start">Start Checking</string>
+    <string name="stop">Stop Checking</string>
+</resources>
