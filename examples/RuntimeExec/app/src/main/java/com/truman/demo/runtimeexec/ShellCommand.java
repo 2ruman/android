@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ShellCommand {
 
@@ -35,39 +36,50 @@ public class ShellCommand {
         private String mCommand;
         private long mWaitSec;
         private IShellCommandCallback mCallback;
-        private boolean mIsRunning;
+        private AtomicBoolean mIsRunning;
 
         public CommandThread(@NonNull String command, long waitSec,
                              @NonNull IShellCommandCallback callback) {
             mCommand = command;
             mWaitSec = waitSec;
             mCallback = callback;
-            mIsRunning = false;
+            mIsRunning = new AtomicBoolean(false);
         }
 
         public boolean isRunning() {
-            return mIsRunning;
+            return mIsRunning.get();
         }
 
         public void stopRunning() {
-            mIsRunning = false;
+            mIsRunning.set(false);
+        }
+
+        private void startRunning() {
+            mIsRunning.set(true);
         }
 
         public void run() {
-            mIsRunning = true;
+            startRunning();
             try {
                 Process proc = Runtime.getRuntime().exec(mCommand);
                 if (mWaitSec > 0) {
                     proc.waitFor(mWaitSec, TimeUnit.SECONDS);
                 }
                 InputStream is = proc.getInputStream();
+                InputStream es = proc.getErrorStream();
                 int readLen;
                 byte[] page = new byte[ONE_PAGE_SIZE];
-                while (mIsRunning
+                while (isRunning()
                         && (readLen = is.read(page)) > 0) {
+                    Log.d(TAG, "before call onReadPage() - TID : " +  android.os.Process.myTid());
+                    mCallback.onReadPage(page, readLen);
+                }
+                while (isRunning()
+                        && (readLen = es.read(page)) > 0) {
                     mCallback.onReadPage(page, readLen);
                 }
                 is.close();
+                es.close();
             } catch (Exception e) {
                 Log.e(TAG, "Unexpected error : " + e.getMessage());
                 e.printStackTrace();
@@ -79,7 +91,7 @@ public class ShellCommand {
                     re.printStackTrace();
                 }
             }
-            mIsRunning = false;
+            stopRunning();
         }
     }
 

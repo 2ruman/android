@@ -19,7 +19,7 @@ import java.lang.ref.WeakReference;
 /**
  * Author  : Truman
  * Contact : truman.t.kim@gmail.com
- * Version : 1.0.0
+ * Version : 1.0.1
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
         });
         mTvStatus = findViewById(R.id.tv_status);
         mTvStatus.setMovementMethod(new ScrollingMovementMethod());
-        Log.d(TAG, "Max lines : " + mTvStatus.getMaxLines());
         mEtCommand = findViewById(R.id.et_cmd);
+        mEtCommand.requestFocus();
     }
 
     private final IShellCommandCallback callback = new IShellCommandCallback.Stub() {
