@@ -1,4 +1,4 @@
-package com.truman.demo.runtimeexec;
+package com.truman.example.runtimeexec;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +19,7 @@ import java.lang.ref.WeakReference;
 /**
  * Author  : Truman
  * Contact : truman.t.kim@gmail.com
- * Version : 1.0.1
+ * Version : 1.0.2
  */
 public class MainActivity extends AppCompatActivity {
 

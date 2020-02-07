@@ -1,4 +1,4 @@
-package com.truman.demo.runtimeexec;
+package com.truman.example.runtimeexec;
 
 import androidx.annotation.NonNull;
 

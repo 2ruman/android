@@ -1,5 +1,5 @@
 // IShellCommandCallback.aidl
-package com.truman.demo.runtimeexec;
+package com.truman.example.runtimeexec;
 
 interface IShellCommandCallback {
     void onReadLine(in String line);
