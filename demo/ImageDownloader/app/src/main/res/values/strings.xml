@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ImageDownloader</string>
+    <string name="download_image">Downloaded Image</string>
+    <string name="url">URL</string>
+    <string name="download">Download</string>
+    <string name="reset">Reset</string>
+</resources>
