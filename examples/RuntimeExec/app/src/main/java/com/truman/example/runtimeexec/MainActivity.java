@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Log.d(TAG, "onCreate()");
+        Log.d(TAG, "onCreate() - TID : " +  android.os.Process.myTid());
 
         mBtnRun = findViewById(R.id.btn_run);
         mBtnRun.setOnClickListener(new Button.OnClickListener() {
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onReadPage(byte[] page, int length) throws RemoteException {
+            Log.d(TAG, "onReadPage() - TID : " +  android.os.Process.myTid());
             // Page to String
             String pageStr = new String(page, 0, length);
             appendTv(pageStr);
