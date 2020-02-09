@@ -17,7 +17,7 @@ import java.lang.ref.WeakReference;
 /**
  * Author  : Truman
  * Contact : truman.t.kim@gmail.com
- * Version : 1.0.2
+ * Version : 1.0.3
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -127,7 +127,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
 }
