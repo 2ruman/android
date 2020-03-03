@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title_password"
+            android:text="@string/password"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.03"
+            android:background="@color/colorUltraMarine"
+            android:textColor="@color/colorWhite"
+            android:gravity="center|left"
+            android:padding="5sp"
+            android:paddingLeft="2sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="10sp"
+            app:autoSizeMaxTextSize="50dp"/>
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.08"
+            android:ems="10"
+            android:inputType="text"/>
+
+        <TextView
+            android:id="@+id/tv_title_key"
+            android:text="@string/key"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.03"
+            android:background="@color/colorUltraMarine"
+            android:textColor="@color/colorWhite"
+            android:gravity="center|left"
+            android:padding="5sp"
+            android:paddingLeft="2sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="10sp"
+            app:autoSizeMaxTextSize="50dp"/>
+
+        <EditText
+            android:id="@+id/et_key"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.08"
+            android:ems="10"
+            android:inputType="text"/>
+
+        <TextView
+            android:id="@+id/tv_title_pt"
+            android:text="@string/plaintext"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.03"
+            android:background="@color/colorUltraMarine"
+            android:textColor="@color/colorWhite"
+            android:gravity="center|left"
+            android:padding="5sp"
+            android:paddingLeft="2sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="10sp"
+            app:autoSizeMaxTextSize="50dp"/>
+
+        <EditText
+            android:id="@+id/et_pt"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.08"
+            android:ems="10"
+            android:inputType="text"/>
+
+        <TextView
+            android:id="@+id/tv_title_ct"
+            android:text="@string/ciphertext"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.03"
+            android:background="@color/colorUltraMarine"
+            android:textColor="@color/colorWhite"
+            android:gravity="center|left"
+            android:padding="5sp"
+            android:paddingLeft="2sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="10sp"
+            app:autoSizeMaxTextSize="50dp"/>
+
+        <EditText
+            android:id="@+id/et_ct"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.08"
+            android:ems="10"
+            android:inputType="text"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.08"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_gen_key"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/gen_key"/>
+            <Button
+                android:id="@+id/btn_pbkdf"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/pbkdf"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.08"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_enc_aes_cbc"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/enc_aes_cbc"/>
+            <Button
+                android:id="@+id/btn_dec_aes_cbc"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/dec_aes_cbc"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.08"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_enc_aes_gcm"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/enc_aes_gcm"/>
+            <Button
+                android:id="@+id/btn_dec_aes_gcm"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/dec_aes_gcm"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_title_status"
+            android:text="@string/status"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.03"
+            android:background="@color/colorUltraMarine"
+            android:textColor="@color/colorWhite"
+            android:gravity="center|left"
+            android:padding="5sp"
+            android:paddingLeft="2sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="10sp"
+            app:autoSizeMaxTextSize="50dp"/>
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.29"
+            android:text="Welcome!"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

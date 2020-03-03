@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Cryptography</string>
+    <string name="plaintext">Plaintext</string>
+    <string name="ciphertext">Ciphertext</string>
+    <string name="enc_aes_cbc">Encrypt(AES-CBC)</string>
+    <string name="dec_aes_cbc">Decrypt(AES-CBC)</string>
+    <string name="enc_aes_gcm">Encrypt(AES-GCM)</string>
+    <string name="dec_aes_gcm">Decrypt(AES-GCM)</string>
+    <string name="password">Password</string>
+    <string name="key">Key</string>
+    <string name="pbkdf">PBKDF</string>
+    <string name="gen_key">Generate Key</string>
+    <string name="status">Status</string>
+</resources>
