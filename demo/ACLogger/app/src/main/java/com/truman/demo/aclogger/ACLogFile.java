@@ -25,7 +25,7 @@ public class ACLogFile {
     private static final int FILE_RESERVED_LENGTH = 32;
 
     // File Pointer(8) + File Version(8) + Reserved(32) + EOL(1)
-    static final int MAX_HEADER_LENGTH = LONG_SIZE + LONG_SIZE + FILE_RESERVED_LENGTH + 1;
+    private static final int MAX_HEADER_LENGTH = LONG_SIZE + LONG_SIZE + FILE_RESERVED_LENGTH + 1;
 
     public static void saveFile(@NonNull Queue<String> logQ) {
         saveFile(FILE_PATH, logQ);

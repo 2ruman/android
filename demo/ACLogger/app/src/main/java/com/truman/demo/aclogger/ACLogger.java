@@ -23,7 +23,7 @@ public class ACLogger {
     public static void setPath(String path) {
     }
 
-    static Logger mLogger = new Logger();
+    private static Logger mLogger = new Logger();
 
     public static void enqMessage(String msg) {
         synchronized (Logger.getLock()) {
@@ -44,27 +44,28 @@ public class ACLogger {
         /*
          * [ Caution! ]
          *
-         *     sLock object used as a locker for Logger control.
-         *     mLogQ is used as a locker for log buffer control.
+         *     cLock object is used as a locker for logger control.
+         *     qLock object is used as a locker for logger-queue handling.
          *
-         *     Locking order : sLock --> mLogQ
+         *     Locking order : cLock --> qLock
          */
-        private static final Object sLock = new Object(); // Logger Control Lock
+        private static final Object cLock = new Object(); // Logger Control Lock
+        private static final Object qLock = new Object(); // Logger Queue Lock
         private static Queue<String> mLogQ = new LinkedList<>();
         private static Queue<String> mSavQ;
         private static final int MAX_LINES = 300;
 
         private static int mState = 0;
 
-        public static Object getLock() {
-            return sLock;
+        private static Object getLock() {
+            return cLock;
         }
 
-        public static int getStateLocked() {
+        private static int getStateLocked() {
             return mState;
         }
 
-        public static void setStateLocked(int state) {
+        private static void setStateLocked(int state) {
             mState = state;
         }
 
@@ -75,8 +76,8 @@ public class ACLogger {
             }
         }
 
-        public static void add(String msg) {
-            synchronized (mLogQ) {
+        private void add(String msg) {
+            synchronized (qLock) {
                 preventBOFLocked(mLogQ);
                 mLogQ.add(msg);
             }
@@ -93,20 +94,20 @@ public class ACLogger {
                     return;
                 }
 
-                synchronized (mLogQ) {
+                synchronized (qLock) {
                     mSavQ = mLogQ;
                     mLogQ = new LinkedList<>();
                 }
 
                 LogD("Start saving");
-                synchronized (sLock) {
+                synchronized (cLock) {
                     setStateLocked(STATE_SAVING);
                 }
 
                 ACLogFile.saveFile(mSavQ);
 
-                synchronized (sLock) {
-                    synchronized (mLogQ) {
+                synchronized (cLock) {
+                    synchronized (qLock) {
                         if (!mLogQ.isEmpty()) {
                             LogD("Back to accumulate");
                             setStateLocked(STATE_ACCUMULATING);

@@ -13,7 +13,7 @@ import java.util.Locale;
 
 public class ACLogUtil {
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
-    public static final String DELIMITER = ","; // For CSV
+    private static final String DELIMITER = ","; // For CSV
     public static final String LEVEL_INFO = "I";
     public static final String LEVEL_DEBUG = "D";
     public static final String LEVEL_ERROR = "E";
