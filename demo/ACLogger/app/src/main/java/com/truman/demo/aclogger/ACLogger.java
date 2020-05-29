@@ -11,7 +11,7 @@ public class ACLogger {
 
     private static final String TAG_SUFFIX = ".2ruman"; // For grep
     private static final String TAG = "ACLog" + TAG_SUFFIX;
-    private static final boolean DEBUG = ACLogUtil.LOGGER_DEBUG;
+    private static final boolean DEBUG = ACLogUtil.DEBUG_LOGGER;
 
     private static final int ACCUM_TIME_MS = 3000;
 
@@ -47,7 +47,7 @@ public class ACLogger {
          *     cLock object is used as a locker for logger control.
          *     qLock object is used as a locker for logger-queue handling.
          *
-         *     Locking order : cLock --> qLock
+         *     Follow the locking order : cLock --> qLock
          */
         private static final Object cLock = new Object(); // Logger Control Lock
         private static final Object qLock = new Object(); // Logger Queue Lock
@@ -73,6 +73,9 @@ public class ACLogger {
             if (logQ.size() >= MAX_LINES) {
                 Log.e(TAG, "Log buffer reached the limit!");
                 logQ.clear();
+                // This message also can be lost by the next reaching the limit.
+                logQ.add(ACLogUtil.makeDebugMessage(
+                        "ACLog: Unfortunately buffer cleared to prevent overflow!"));
             }
         }
 

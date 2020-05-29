@@ -3,7 +3,7 @@ package com.truman.demo.aclogger;
 import android.app.Application;
 import android.os.Environment;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.File;
 import java.text.Format;
@@ -14,21 +14,32 @@ import java.util.Locale;
 public class ACLogUtil {
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
     private static final String DELIMITER = ","; // For CSV
-    public static final String LEVEL_INFO = "I";
-    public static final String LEVEL_DEBUG = "D";
-    public static final String LEVEL_ERROR = "E";
+    public static final String TYPE_INFO  = "I";
+    public static final String TYPE_DEBUG = "D";
+    public static final String TYPE_ERROR = "E";
 
     // Debugging Control
-    public static final boolean LOG_DEBUG = false;
-    public static final boolean LOGGER_DEBUG = true;
-    public static final boolean LOGFILE_DEBUG = true;
+    public static final boolean DEBUG_LOG = true;
+    public static final boolean DEBUG_LOGGER = true;
+    public static final boolean DEBUG_LOGFILE = true;
 
-    public static String makeSequence(String msg, @NonNull String level) {
-        return getCurrentTime() + DELIMITER + level + DELIMITER + safe(msg);
+    public static String[] makeInfoMessages(@Nullable String msg) {
+        String prefix = getCurrentTime() + DELIMITER + TYPE_INFO + DELIMITER;
+        String info = prefix + makeCallingInfo();
+
+        if (msg == null) {
+            return new String[] { info };
+        } else {
+            return new String[] { prefix + msg, info };
+        }
     }
 
-    public static String[] makeErrorSequences(String msg, Exception e) {
-        String prefix = getCurrentTime() + DELIMITER + LEVEL_ERROR + DELIMITER;
+    public static String makeDebugMessage(@Nullable String msg) {
+        return getCurrentTime() + DELIMITER + TYPE_DEBUG + DELIMITER + safe(msg);
+    }
+
+    public static String[] makeErrorMessages(@Nullable String msg, Exception e) {
+        String prefix = getCurrentTime() + DELIMITER + TYPE_ERROR + DELIMITER;
         String[] ret = new String[0];
 
         if (e == null) {
@@ -53,6 +64,55 @@ public class ACLogUtil {
             }
         } catch (Exception unexpected) {}
 
+        return ret;
+    }
+
+    public static String makePairs(Object... objs) {
+        if (objs == null) {
+            return "null";
+        } else if (objs.length == 0) {
+            return "[:]";
+        }
+
+        StringBuilder sb = new StringBuilder((objs.length + 1) >> 1);
+        String pair = "";
+        boolean isOpen = false;
+
+        for (int i = 0 ; i < objs.length ; i++) {
+            String element;
+            if (objs[i] == null) {
+                element = "null";
+            } else if(objs[i] instanceof byte[]) { // Special handling for byte array!
+                element = bytesToHex((byte[]) objs[i]);
+            } else {
+                element = objs[i].toString();
+            }
+            if (!isOpen) {
+                pair = "[ " + element + " : ";
+            } else {
+                pair += element + " ]";
+                sb.append(pair);
+            }
+            isOpen = !isOpen;
+        }
+        // Door is still open. Close the door!
+        if (isOpen) {
+            sb.append(pair += "]");
+        }
+        return sb.toString();
+    }
+
+    private static String makeCallingInfo() {
+        String ret = "";
+        try {
+            StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
+            StackTraceElement curr = stacks[2];
+            StackTraceElement prev = stacks[3];
+            String currInfo = curr.getClassName() + "." + curr.getMethodName() + "()";
+            String prevInfo = prev.getClassName() + "." + prev.getMethodName() + "()";
+            ret = makePairs("Curr", currInfo, "Prev", prevInfo);
+        } catch (ArrayIndexOutOfBoundsException e) {
+        }
         return ret;
     }
 

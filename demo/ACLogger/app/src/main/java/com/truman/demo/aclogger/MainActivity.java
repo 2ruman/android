@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private void run() {
         Log.d(TAG, "run() - Inside");
 
-        new StressTestTask(10).execute();
+        new StressTestTask(100).execute();
     }
 
     private void open() {
@@ -117,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
         static final int MAX_DELAY_MS = 1000;
         static final int MIN_BYTES = 20;
         static final int MAX_BYTES = 60;
+        static final int TYPE_INFO = 0x1;
+        static final int TYPE_DEBUG = 0x2;
+        static final int TYPE_ERROR = 0x4;
 
         private String tag;
         private SecureRandom secureRandom = new SecureRandom();
@@ -129,8 +132,15 @@ public class MainActivity extends AppCompatActivity {
             return tag;
         }
 
-        boolean isError() {
-            return secureRandom.nextInt(10) == 5; // 10 % to be error log
+        private int getType() {
+            int lottery = secureRandom.nextInt(10);
+            if (lottery >= 9) {
+                return TYPE_ERROR; // 10 % probability to be error log
+            } else if (lottery > 6) {
+                return TYPE_INFO;  // 20 % probability to be info log
+            } else {
+                return TYPE_DEBUG; // 70 % probability to be debug log
+            }
         }
 
         @Override
@@ -146,10 +156,16 @@ public class MainActivity extends AppCompatActivity {
                 byte[] bytes = new byte[numBytes];
                 secureRandom.nextBytes(bytes);
 
-                if (isError()) {
-                    ACLog.e(getTag() + " : " + ACLogUtil.bytesToHex(bytes), generateFakeException());
-                } else {
-                    ACLog.d(getTag() + " : " + ACLogUtil.bytesToHex(bytes));
+                switch(getType()) {
+                    case TYPE_INFO:
+                        ACLog.i(getTag() + " :  " + ACLogUtil.bytesToHex(bytes));
+                        break;
+                    case TYPE_DEBUG:
+                        ACLog.d(getTag() + " : " + ACLogUtil.bytesToHex(bytes));
+                        break;
+                    case TYPE_ERROR:
+                        ACLog.e(getTag() + " : " + ACLogUtil.bytesToHex(bytes), generateFakeException());
+                        break;
                 }
             }
         }

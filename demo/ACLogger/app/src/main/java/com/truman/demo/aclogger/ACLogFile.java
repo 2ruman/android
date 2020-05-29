@@ -12,7 +12,7 @@ public class ACLogFile {
 
     private static final String TAG_SUFFIX = ".2ruman"; // For grep
     private static final String TAG = "ACLogFile" +  TAG_SUFFIX;
-    private static final boolean DEBUG = ACLogUtil.LOGFILE_DEBUG;
+    private static final boolean DEBUG = ACLogUtil.DEBUG_LOGFILE;
 
     private static final int MAX_FILE_SIZE = 1 * 1024 * 1024; // 1 MiB
     private static final String FILE_NAME = "aclog";
@@ -27,6 +27,8 @@ public class ACLogFile {
     // File Pointer(8) + File Version(8) + Reserved(32) + EOL(1)
     private static final int MAX_HEADER_LENGTH = LONG_SIZE + LONG_SIZE + FILE_RESERVED_LENGTH + 1;
 
+    // The accumulated logs will be written to the path,
+    // /storage/emulated/0/Android/data/com.truman.demo.aclogger/cache/aclog, by default.
     public static void saveFile(@NonNull Queue<String> logQ) {
         saveFile(FILE_PATH, logQ);
     }
@@ -77,8 +79,7 @@ public class ACLogFile {
         try {
             check(file);
         } catch (SecurityException e) {
-            resetMessageBytes = ACLogUtil.makeSequence(
-                    e.getMessage(), ACLogUtil.LEVEL_INFO).getBytes();
+            resetMessageBytes = ACLogUtil.makeDebugMessage(e.getMessage()).getBytes();
             LogD("Reset reason : " + e.getMessage());
         }
 

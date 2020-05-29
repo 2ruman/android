@@ -2,10 +2,6 @@ package com.truman.demo.aclogger;
 
 import android.util.Log;
 
-import static com.truman.demo.aclogger.ACLogUtil.LEVEL_INFO;
-import static com.truman.demo.aclogger.ACLogUtil.LEVEL_DEBUG;
-//import static com.truman.demo.aclogger.ACLogUtil.LEVEL_ERROR;
-
 /**
  * Author  : Truman
  * Contact : truman.t.kim@gmail.com
@@ -14,22 +10,28 @@ import static com.truman.demo.aclogger.ACLogUtil.LEVEL_DEBUG;
 public class ACLog {
 
     private static final String TAG = "ACLog";
-    private static final boolean DEBUG = ACLogUtil.LOG_DEBUG;
+    private static final boolean DEBUG = ACLogUtil.DEBUG_LOG;
 
     private ACLog() {
     }
 
+    public static void i() {
+        i(null);
+    }
+
     public static void i(String msg) {
-        String seq = ACLogUtil.makeSequence(msg, LEVEL_INFO);
-        ACLogger.enqMessage(seq);
+        String[] iMsgs = ACLogUtil.makeInfoMessages(msg);
+        for (String iMsg : iMsgs) {
+            ACLogger.enqMessage(iMsg);
+        }
         if (DEBUG && msg != null) {
             Log.i(TAG+".i", msg);
         }
     }
 
     public static void d(String msg) {
-        String seq = ACLogUtil.makeSequence(msg, LEVEL_DEBUG);
-        ACLogger.enqMessage(seq);
+        String dMsg = ACLogUtil.makeDebugMessage(msg);
+        ACLogger.enqMessage(dMsg);
         if (DEBUG && msg != null) {
             Log.d(TAG+".d", msg);
         }
@@ -40,12 +42,13 @@ public class ACLog {
     }
 
     public static void e(String msg, Exception e) {
-        String[] seqs = ACLogUtil.makeErrorSequences(msg, e);
-        for (String seq : seqs) {
-            ACLogger.enqMessage(seq);
+        String[] eMsgs = ACLogUtil.makeErrorMessages(msg, e);
+        for (String eMsg : eMsgs) {
+            ACLogger.enqMessage(eMsg);
         }
         if (DEBUG && msg != null) {
-            Log.e(TAG+".e", msg); e.printStackTrace();
+            Log.e(TAG+".e", msg);
+            e.printStackTrace();
         }
     }
 }
