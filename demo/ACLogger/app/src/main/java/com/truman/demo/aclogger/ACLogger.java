@@ -10,8 +10,8 @@ import java.util.Queue;
 public class ACLogger {
 
     private static final String TAG_SUFFIX = ".2ruman"; // For grep
-    private static final String TAG = "ACLog" + TAG_SUFFIX;
-    private static final boolean DEBUG = ACLogUtil.DEBUG_LOGGER;
+    private static final String TAG = "ACLogger" + TAG_SUFFIX;
+    private static final boolean DEBUG = BuildConfig.DEBUG;
 
     private static final int ACCUM_TIME_MS = 3000;
 
@@ -19,22 +19,27 @@ public class ACLogger {
     private static final int STATE_ACCUMULATING = 1;
     private static final int STATE_SAVING = 2;
 
-    // TODO : Implement/open API to set a path for saving the log file
-    public static void setPath(String path) {
+    static String getPath() {
+        return Logger.getPath();
+    }
+
+    static void setPath(String path) {
+        Logger.setPath(path);
     }
 
     private static Logger mLogger = new Logger();
 
-    public static void enqMessage(String msg) {
+    static void enqMessage(String msg) {
         synchronized (Logger.getLock()) {
             if (Logger.getStateLocked() == STATE_IDLE) {
                 Logger.setStateLocked(STATE_ACCUMULATING);
                 mLogger = new Logger();
                 mLogger.setDaemon(true);
                 mLogger.start();
-                mLogger.add(msg);
-            } else if (Logger.getStateLocked() == STATE_ACCUMULATING
-                    || Logger.getStateLocked() == STATE_SAVING) {
+            }
+            // if (Logger.getStateLocked() == STATE_ACCUMULATING
+            //      || Logger.getStateLocked() == STATE_SAVING)
+            if (mLogger != null) {
                 mLogger.add(msg);
             }
         }
@@ -46,16 +51,20 @@ public class ACLogger {
          *
          *     cLock object is used as a locker for logger control.
          *     qLock object is used as a locker for logger-queue handling.
+         *     pLock object is used as a locker for getting/setting target log-file path.
          *
          *     Follow the locking order : cLock --> qLock
+         *     pLock is dedicated for get-set methods
          */
         private static final Object cLock = new Object(); // Logger Control Lock
         private static final Object qLock = new Object(); // Logger Queue Lock
+        private static final Object pLock = new Object(); // Logger File Path Lock
         private static Queue<String> mLogQ = new LinkedList<>();
         private static Queue<String> mSavQ;
-        private static final int MAX_LINES = 300;
+        private static final int MAX_LINES = 300; // Buffer limit for system efficiency
 
         private static int mState = 0;
+        private static String sFilePath = null;
 
         private static Object getLock() {
             return cLock;
@@ -71,9 +80,11 @@ public class ACLogger {
 
         private static void preventBOFLocked(Queue<String> logQ) {
             if (logQ.size() >= MAX_LINES) {
-                Log.e(TAG, "Log buffer reached the limit!");
+                LogE("Log buffer reached the limit! Clearing the buffer...");
                 logQ.clear();
-                // This message also can be lost by the next reaching the limit.
+
+                // Recording what happened at this moment, however this message below also can
+                // be lost by the prevention of next reaching.
                 logQ.add(ACLogUtil.makeDebugMessage(
                         "ACLog: Unfortunately buffer cleared to prevent overflow!"));
             }
@@ -89,11 +100,11 @@ public class ACLogger {
         @Override
         public void run() {
             for (;;) {
-                LogD("Start accumulating");
+                LogD("Start accumulating...");
                 try {
                     Thread.sleep(ACCUM_TIME_MS);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    LogE("Logger interrupted!");
                     return;
                 }
 
@@ -102,17 +113,21 @@ public class ACLogger {
                     mLogQ = new LinkedList<>();
                 }
 
-                LogD("Start saving");
+                LogD("Start saving...");
                 synchronized (cLock) {
                     setStateLocked(STATE_SAVING);
                 }
 
-                ACLogFile.saveFile(mSavQ);
+                // The saving queue is valid only in this runnable region,
+                // thus no lock is required, and after saving the queue shall be disposed for GC.
+                ACLogFile.saveFile(getPath(), mSavQ);
+                mSavQ.clear();
+                mSavQ = null;
 
                 synchronized (cLock) {
                     synchronized (qLock) {
                         if (!mLogQ.isEmpty()) {
-                            LogD("Back to accumulate");
+                            LogD("Back to accumulate!");
                             setStateLocked(STATE_ACCUMULATING);
                             continue;
                         } else {
@@ -124,11 +139,30 @@ public class ACLogger {
                 break;
             }
         }
+
+        private static String getPath() {
+            synchronized (pLock) {
+                if (sFilePath == null) {
+                    return ACLogFile.getDefaultPath();
+                }
+                return sFilePath;
+            }
+        }
+
+        private static synchronized void setPath(String path) {
+            synchronized (pLock) {
+                sFilePath = path;
+            }
+        }
     }
 
     private static void LogD(@NonNull String msg) {
         if (DEBUG) {
             Log.d(TAG, msg);
         }
+    }
+
+    private static void LogE(@NonNull String msg) {
+        Log.e(TAG, msg);
     }
 }

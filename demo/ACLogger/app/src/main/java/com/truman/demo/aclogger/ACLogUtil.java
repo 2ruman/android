@@ -1,6 +1,7 @@
 package com.truman.demo.aclogger;
 
 import android.app.Application;
+import android.os.Binder;
 import android.os.Environment;
 
 import androidx.annotation.Nullable;
@@ -14,28 +15,37 @@ import java.util.Locale;
 public class ACLogUtil {
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
     private static final String DELIMITER = ","; // For CSV
-    public static final String TYPE_INFO  = "I";
-    public static final String TYPE_DEBUG = "D";
-    public static final String TYPE_ERROR = "E";
+    private static final String TYPE_INFO  = "I";
+    private static final String TYPE_DEBUG = "D";
+    private static final String TYPE_ERROR = "E";
 
-    // Debugging Control
-    public static final boolean DEBUG_LOG = true;
-    public static final boolean DEBUG_LOGGER = true;
-    public static final boolean DEBUG_LOGFILE = true;
+    public static String makeDebugMessage(@Nullable String msg) {
+        return getCurrentTime() + DELIMITER + TYPE_DEBUG + DELIMITER + safe(msg);
+    }
 
-    public static String[] makeInfoMessages(@Nullable String msg) {
+    public static String[] makeInfoMessages(@Nullable String msg, Throwable throwable) {
         String prefix = getCurrentTime() + DELIMITER + TYPE_INFO + DELIMITER;
-        String info = prefix + makeCallingInfo();
+        String info = prefix;
+        if (throwable != null) {
+            try {
+                StackTraceElement[] stacks = throwable.getStackTrace();
+                String currInfo = stacks.length > 1 ?
+                        stacks[1].getClassName() + "." + stacks[1].getMethodName() + "()" : "()";
+                String prevInfo = stacks.length > 2 ?
+                        stacks[2].getClassName() + "." + stacks[2].getMethodName() + "()" : "()";
+                String pid = String.valueOf(Binder.getCallingPid());
+                String tid = String.valueOf(Binder.getCallingUid());
+
+                info += makePairs("PID", pid, "TID", tid, "Curr", currInfo, "Prev", prevInfo);
+            } catch (ArrayIndexOutOfBoundsException e) {
+            }
+        }
 
         if (msg == null) {
             return new String[] { info };
         } else {
             return new String[] { prefix + msg, info };
         }
-    }
-
-    public static String makeDebugMessage(@Nullable String msg) {
-        return getCurrentTime() + DELIMITER + TYPE_DEBUG + DELIMITER + safe(msg);
     }
 
     public static String[] makeErrorMessages(@Nullable String msg, Exception e) {
@@ -102,28 +112,14 @@ public class ACLogUtil {
         return sb.toString();
     }
 
-    private static String makeCallingInfo() {
-        String ret = "";
-        try {
-            StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
-            StackTraceElement curr = stacks[2];
-            StackTraceElement prev = stacks[3];
-            String currInfo = curr.getClassName() + "." + curr.getMethodName() + "()";
-            String prevInfo = prev.getClassName() + "." + prev.getMethodName() + "()";
-            ret = makePairs("Curr", currInfo, "Prev", prevInfo);
-        } catch (ArrayIndexOutOfBoundsException e) {
-        }
-        return ret;
-    }
-
-    private static String getCurrentTime() {
+    public static String getCurrentTime() {
         long currTime = System.currentTimeMillis();
         Date date = new Date(currTime);
         Format dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
         return dateFormat.format(date);
     }
 
-    private static String safe(String val) {
+    public static String safe(String val) {
         return (val != null) ? val : "null";
     }
 
@@ -142,7 +138,7 @@ public class ACLogUtil {
      * TODO : Need to find any alternative way to proper storage 'cause getting external storage
      *        directory had been deprecated for security concern, precisely user privacy.
      */
-    public static File getExternalCacheDir() {
+    static File getExternalCacheDir() {
         try {
             return getApplicationReflected().getExternalCacheDir();
         } catch (Exception e) {

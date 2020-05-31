@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private Button mBtnOpen;
     private TextView mTvStatus;
 
+    private File mTargetFile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,24 +50,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mTvStatus = findViewById(R.id.tv_status);
-    }
 
+        // [ Choose one of targetable paths ]
+        //
+        // 1. Internal app data directory path
+        // mTargetFile = new File(this.getFilesDir(), "aclog");
+        //
+        // 2. External app cache directory path
+        mTargetFile = new File(ACLog.getPath());
+        //
+        // 3. External storage directory path
+        // mTargetFile = new File(Environment.getExternalStorageDirectory(), "aclog");
+
+        ACLog.setPath(mTargetFile.getAbsolutePath());
+        mTvStatus.setText("Target log file path :\n" + ACLog.getPath());
+    }
 
     private void run() {
         Log.d(TAG, "run() - Inside");
 
-        new StressTestTask(100).execute();
+        runInternal();
+    }
+
+    private void runInternal() {
+        ACLog.d(TAG, "Run!");
+        ACLog.i(TAG, "Run!");
+        ACLog.e(TAG, "Run!", new RuntimeException());
+
+        new StressTestTask(10).execute();
     }
 
     private void open() {
         Log.d(TAG, "open() - Inside");
 
-        File file = new File(ACLogUtil.getExternalCacheDir(), "aclog");
-        Log.d(TAG, "File to open : " + file.getAbsolutePath());
-        openFile(file);
+        Log.d(TAG, "File to open : " + mTargetFile.getAbsolutePath());
+        openTargetFile(mTargetFile);
     }
 
-    private void openFile(File file){
+    private void openTargetFile(File file){
         Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", file);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -158,13 +180,16 @@ public class MainActivity extends AppCompatActivity {
 
                 switch(getType()) {
                     case TYPE_INFO:
-                        ACLog.i(getTag() + " :  " + ACLogUtil.bytesToHex(bytes));
+                        ACLog.i(getTag(), ACLogUtil.bytesToHex(bytes));
+                        // ACLog.i(getTag() + " : " + ACLogUtil.bytesToHex(bytes));
                         break;
                     case TYPE_DEBUG:
-                        ACLog.d(getTag() + " : " + ACLogUtil.bytesToHex(bytes));
+                        ACLog.d(getTag(), ACLogUtil.bytesToHex(bytes));
+                        // ACLog.d(getTag() + " : " + ACLogUtil.bytesToHex(bytes));
                         break;
                     case TYPE_ERROR:
-                        ACLog.e(getTag() + " : " + ACLogUtil.bytesToHex(bytes), generateFakeException());
+                        ACLog.e(getTag(), ACLogUtil.bytesToHex(bytes), generateFakeException());
+                        // ACLog.e(getTag() + " : " + ACLogUtil.bytesToHex(bytes), generateFakeException());
                         break;
                 }
             }

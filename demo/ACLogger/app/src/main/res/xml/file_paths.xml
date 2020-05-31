@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
+    <files-path
+        name="app-files"
+        path="/" />
+    <external-path
+        name="external-files"
+        path="/" />
     <external-cache-path
         name="external-cache-files"
         path="/" />

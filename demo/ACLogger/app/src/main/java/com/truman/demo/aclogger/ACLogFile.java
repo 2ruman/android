@@ -6,15 +6,16 @@ import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Locale;
 import java.util.Queue;
 
 public class ACLogFile {
 
     private static final String TAG_SUFFIX = ".2ruman"; // For grep
     private static final String TAG = "ACLogFile" +  TAG_SUFFIX;
-    private static final boolean DEBUG = ACLogUtil.DEBUG_LOGFILE;
+    private static final boolean DEBUG = BuildConfig.DEBUG;
 
-    private static final int MAX_FILE_SIZE = 1 * 1024 * 1024; // 1 MiB
+    private static final long MAX_FILE_SIZE = 1 * 1024 * 1024; // 1 MiB
     private static final String FILE_NAME = "aclog";
     private static final String FILE_PATH =  ACLogUtil.getExternalCacheDir().getAbsolutePath() + "/" + FILE_NAME;
     private static final byte EOL = 10;
@@ -25,18 +26,14 @@ public class ACLogFile {
     private static final int FILE_RESERVED_LENGTH = 32;
 
     // File Pointer(8) + File Version(8) + Reserved(32) + EOL(1)
-    private static final int MAX_HEADER_LENGTH = LONG_SIZE + LONG_SIZE + FILE_RESERVED_LENGTH + 1;
+    private static final long MAX_HEADER_LENGTH = LONG_SIZE + LONG_SIZE + FILE_RESERVED_LENGTH + 1;
 
     // The accumulated logs will be written to the path,
     // /storage/emulated/0/Android/data/com.truman.demo.aclogger/cache/aclog, by default.
-    public static void saveFile(@NonNull Queue<String> logQ) {
-        saveFile(FILE_PATH, logQ);
-    }
-
     public static void saveFile(@NonNull String filePath, @NonNull Queue<String> logQ) {
-        LogD("Saving logs start!");
+        LogI("Saving logs... [QS : " + logQ.size() + "]");
+        LogD("Target path : " + filePath);
 
-        boolean noError = false;
         try {
 
             RandomAccessFile file = new RandomAccessFile(filePath, "rwd");
@@ -49,6 +46,9 @@ public class ACLogFile {
 
             while (!logQ.isEmpty()) {
                 String log = logQ.poll();
+                if (log == null) {
+                    continue;
+                }
                 byte[] data = log.getBytes();
                 if (filePointer + data.length  + EOL_SIZE > MAX_FILE_SIZE) {
                     file.seek(MAX_HEADER_LENGTH);
@@ -61,17 +61,18 @@ public class ACLogFile {
 
             file.seek(FILE_OFFSET);
             file.writeLong(filePointer);
-            noError = true;
+
+            LogI(String.format(Locale.US,
+                    "Saving success! [FP : %d, FS : %d]", filePointer, file.length()));
         } catch (Exception e) {
             LogE("Failed to save logs : " + e.toString());
             e.printStackTrace();
-        } finally {
-            if (logQ != null) logQ.clear();
         }
+        return;
+    }
 
-        if (noError) {
-            LogI("Saving logs success!");
-        }
+    public static String getDefaultPath() {
+        return FILE_PATH;
     }
 
     private static void checkAndReset(@NonNull RandomAccessFile file) throws IOException {
@@ -131,6 +132,12 @@ public class ACLogFile {
         LogD("Header Check : Passed!");
     }
 
+    private static void LogD(String msg) {
+        if (DEBUG && msg != null) {
+            Log.d(TAG, msg);
+        }
+    }
+
     private static void LogI(String msg) {
         if (msg != null) {
             Log.i(TAG, msg);
@@ -138,14 +145,8 @@ public class ACLogFile {
     }
 
     private static void LogE(String msg) {
-        if (DEBUG && msg != null) {
+        if (msg != null) {
             Log.e(TAG, msg);
-        }
-    }
-
-    private static void LogD(String msg) {
-        if (DEBUG && msg != null) {
-            Log.d(TAG, msg);
         }
     }
 }
