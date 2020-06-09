@@ -5,7 +5,7 @@ import android.util.Log;
 /**
  * Author  : Truman
  * Contact : truman.t.kim@gmail.com
- * Version : 1.0.1.0
+ * Version : 1.0.2
  */
 public class ACLog {
 

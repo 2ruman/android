@@ -33,10 +33,13 @@ public class ACLogUtil {
                         stacks[1].getClassName() + "." + stacks[1].getMethodName() + "()" : "()";
                 String prevInfo = stacks.length > 2 ?
                         stacks[2].getClassName() + "." + stacks[2].getMethodName() + "()" : "()";
+                String uid = String.valueOf(Binder.getCallingUid());
                 String pid = String.valueOf(Binder.getCallingPid());
-                String tid = String.valueOf(Binder.getCallingUid());
+                String tid = String.valueOf(android.os.Process.myTid());
+                String userId = android.os.Process.myUserHandle().toString()
+                        .replaceAll("[^0-9]", "");
 
-                info += makePairs("PID", pid, "TID", tid, "Curr", currInfo, "Prev", prevInfo);
+                info += makePairs("UserId", userId, "UID", uid, "PID", pid, "TID", tid, "Curr", currInfo, "Prev", prevInfo);
             } catch (ArrayIndexOutOfBoundsException e) {
             }
         }
