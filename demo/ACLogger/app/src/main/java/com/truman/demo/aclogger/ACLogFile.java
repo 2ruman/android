@@ -34,9 +34,7 @@ public class ACLogFile {
         LogI("Saving logs... [QS : " + logQ.size() + "]");
         LogD("Target path : " + filePath);
 
-        try {
-
-            RandomAccessFile file = new RandomAccessFile(filePath, "rwd");
+        try (RandomAccessFile file = new RandomAccessFile(filePath, "rwd")) {
 
             checkAndReset(file);
 
