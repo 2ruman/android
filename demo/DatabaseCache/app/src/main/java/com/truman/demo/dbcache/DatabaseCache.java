@@ -18,9 +18,9 @@ import java.util.Map;
 /**
  * Author  : Truman
  * Contact : truman.t.kim@gmail.com
- * Version : 1.0.0
+ * Version : 1.0.1
  */
-class DatabaseCache {
+public class DatabaseCache {
 
     private static final String TAG_SUFFIX = ".2ruman"; // For grep
     private static final String TAG = "DatabaseCache" +  TAG_SUFFIX;
