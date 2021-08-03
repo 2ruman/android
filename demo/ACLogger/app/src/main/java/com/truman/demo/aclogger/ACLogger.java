@@ -4,10 +4,12 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.atomic.AtomicReference;
 
-public class ACLogger {
+public final class ACLogger {
 
     private static final String TAG_SUFFIX = ".2ruman"; // For grep
     private static final String TAG = "ACLogger" + TAG_SUFFIX;
@@ -51,20 +53,17 @@ public class ACLogger {
          *
          *     cLock object is used as a locker for logger control.
          *     qLock object is used as a locker for logger-queue handling.
-         *     pLock object is used as a locker for getting/setting target log-file path.
          *
          *     Follow the locking order : cLock --> qLock
-         *     pLock is dedicated for get-set methods
          */
         private static final Object cLock = new Object(); // Logger Control Lock
         private static final Object qLock = new Object(); // Logger Queue Lock
-        private static final Object pLock = new Object(); // Logger File Path Lock
         private static Queue<String> mLogQ = new LinkedList<>();
         private static Queue<String> mSavQ;
         private static final int MAX_LINES = 300; // Buffer limit for system efficiency
 
         private static int mState = 0;
-        private static String sFilePath = null;
+        private static AtomicReference<String> sFilePath = new AtomicReference<>();
 
         private static Object getLock() {
             return cLock;
@@ -141,19 +140,20 @@ public class ACLogger {
         }
 
         private static String getPath() {
-            synchronized (pLock) {
-                if (sFilePath == null) {
-                    return ACLogFile.getDefaultPath();
-                }
-                return sFilePath;
+            String path = sFilePath.get();
+            if (path == null) {
+                return ACLogFile.getDefaultPath();
             }
+            return path;
         }
 
-        private static synchronized void setPath(String path) {
-            synchronized (pLock) {
-                sFilePath = path;
-            }
+        private static void setPath(String path) {
+            sFilePath.set(path);
         }
+    }
+
+    public static void dump(@NonNull PrintWriter pw) {
+        ACLogFile.dump(getPath(), pw);
     }
 
     private static void LogD(@NonNull String msg) {

@@ -3,14 +3,18 @@ package com.truman.demo.aclogger;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.security.SecureRandom;
@@ -22,10 +26,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_SUFFIX = ".2ruman"; // For grep
     private static final String TAG = "MainActivity" +  TAG_SUFFIX;
 
-    private Button mBtnRun;
+    private Button mBtnRunService;
+    private Button mBtnRunTest;
     private Button mBtnOpen;
     private TextView mTvStatus;
 
+    private MainService mMainService;
+    private boolean mBindingRequseted;
     private File mTargetFile;
 
     @Override
@@ -35,20 +42,12 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate()");
 
-        mBtnRun = findViewById(R.id.btn_run);
-        mBtnRun.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                run();
-            }
-        });
+        mBtnRunService = findViewById(R.id.btn_run_service);
+        mBtnRunService.setOnClickListener(v -> runService());
+        mBtnRunTest = findViewById(R.id.btn_run_test);
+        mBtnRunTest.setOnClickListener(v -> runTest());
         mBtnOpen = findViewById(R.id.btn_open);
-        mBtnOpen.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                open();
-            }
-        });
+        mBtnOpen.setOnClickListener(v -> open());
         mTvStatus = findViewById(R.id.tv_status);
 
         // [ Choose one of targetable paths ]
@@ -66,13 +65,76 @@ public class MainActivity extends AppCompatActivity {
         mTvStatus.setText("Target log file path :\n" + ACLog.getPath());
     }
 
-    private void run() {
-        Log.d(TAG, "run() - Inside");
-
-        runInternal();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy()");
+        stopService();
     }
 
-    private void runInternal() {
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            mMainService = ((MainService.ServiceBinder) service).getService();
+            logAndToast("Service connected");
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            mMainService = null;
+            logAndToast("Service disconnected");
+        }
+
+        @Override
+        public void onBindingDied(ComponentName name) {
+            mMainService = null;
+            logAndToast("Binding died");
+        }
+
+        @Override
+        public void onNullBinding(ComponentName name) {
+            // Nothing to do...
+        }
+    };
+
+    private void logAndToast(final String msg) {
+        Log.d(TAG, msg);
+        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    void doBindService() {
+        final Intent serviceIntent = new Intent(MainActivity.this, MainService.class);
+
+        if (bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE)) {
+            Log.d(TAG, "Service binding requested");
+            mBindingRequseted = true;
+        } else {
+            Log.e(TAG, "Failed to bind main service...");
+        }
+    }
+
+    void doUnbindService() {
+        if (mBindingRequseted) {
+            unbindService(mServiceConnection);
+            mBindingRequseted = false;
+        }
+    }
+
+    private void runService() {
+        Log.d(TAG, "runService() - Inside");
+
+        doBindService();
+    }
+
+    private void stopService() {
+        doUnbindService();
+    }
+
+    private void runTest() {
+        Log.d(TAG, "runTest() - Inside");
+
+        runTestInternal();
+    }
+
+    private void runTestInternal() {
         ACLog.d(TAG, "Run!");
         ACLog.i(TAG, "Run!");
         ACLog.e(TAG, "Run!", new RuntimeException());
@@ -105,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            mBtnRun.setEnabled(false);
+            mBtnRunTest.setEnabled(false);
             mBtnOpen.setEnabled(false);
         }
 
@@ -128,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            mBtnRun.setEnabled(true);
+            mBtnRunTest.setEnabled(true);
             mBtnOpen.setEnabled(true);
         }
     }

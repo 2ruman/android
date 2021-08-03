@@ -15,17 +15,24 @@
             android:id="@+id/tv_status"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.8"
+            android:layout_weight="0.7"
             android:gravity="bottom"
             android:scrollbars="vertical"
             android:text="Hello, my friend!\n" />
 
         <Button
-            android:id="@+id/btn_run"
+            android:id="@+id/btn_run_service"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.1"
-            android:text="Run" />
+            android:text="Run Service" />
+
+        <Button
+            android:id="@+id/btn_run_test"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:text="Run Test" />
 
         <Button
             android:id="@+id/btn_open"

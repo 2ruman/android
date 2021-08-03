@@ -2,12 +2,14 @@ package com.truman.demo.aclogger;
 
 import android.util.Log;
 
+import java.io.PrintWriter;
+
 /**
  * Author  : Truman
  * Contact : truman.t.kim@gmail.com
- * Version : 1.0.3
+ * Version : 1.1.0
  */
-public class ACLog {
+public final class ACLog {
 
     private static final String TAG = "ACLog";
     private static final boolean REFLECT = true;
@@ -66,6 +68,10 @@ public class ACLog {
             Log.e(tag != null ? tag : TAG, msg);
             e.printStackTrace();
         }
+    }
+
+    public static void dump(PrintWriter pw) {
+        ACLogger.dump(pw);
     }
 
     public static String getPath() {

@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class ACLogUtil {
+public final class ACLogUtil {
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
     private static final String DELIMITER = ","; // For CSV
     private static final String TYPE_INFO  = "I";
