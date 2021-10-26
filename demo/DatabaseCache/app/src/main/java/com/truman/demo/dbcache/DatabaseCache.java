@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Author  : Truman
  * Contact : truman.t.kim@gmail.com
- * Version : 1.0.1
+ * Version : 1.0.2
  */
 public class DatabaseCache {
 
@@ -92,7 +92,10 @@ public class DatabaseCache {
             // the software is used for system database, then it could be critical, as is not predictable.
             reportError("put", e);
         } finally {
-            if (db != null) db.endTransaction();
+            if (db != null) {
+                db.endTransaction();
+                db.close();
+            }
         }
         if (success) {
             cache(userId, key, value);
@@ -178,7 +181,10 @@ public class DatabaseCache {
             // the software is used for system database, then it could be critical, as is not predictable.
             reportError("del", e);
         } finally {
-            if (db != null) db.endTransaction();
+            if (db != null) {
+                db.endTransaction();
+                db.close();
+            }
         }
         if (success) {
             decache(userId, key);
@@ -253,7 +259,10 @@ public class DatabaseCache {
             // the software is used for system database, then it could be critical, as is not predictable.
             reportError("remove", e);
         } finally {
-            if (db != null) db.endTransaction();
+            if (db != null) {
+                db.endTransaction();
+                db.close();
+            }
         }
         if (!noError) {
             return;
