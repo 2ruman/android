@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Author  : Truman
  * Contact : truman.t.kim@gmail.com
- * Version : 1.0.2
+ * Version : 1.0.3
  */
 public class DatabaseCache {
 
@@ -144,8 +144,9 @@ public class DatabaseCache {
 
         boolean success = false;
         Cursor cursor = null;
+        SQLiteDatabase db = null;
         try {
-            SQLiteDatabase db = mDatabaseHelper.getReadableDatabase();
+            db = mDatabaseHelper.getReadableDatabase();
             if ((cursor = db.query(TABLE, new String[] { COLUMN_VALUE },
                     COLUMN_KEY + "=? AND " + COLUMN_USER + "=?",
                     new String[] { key, Integer.toString(userId) },
@@ -158,6 +159,7 @@ public class DatabaseCache {
             reportError("get", e);
         } finally {
             if (cursor != null) cursor.close();
+            if (db != null) db.close();
         }
         if (success) {
             cache(userId, key, ret);
@@ -222,8 +224,9 @@ public class DatabaseCache {
 
     public void preload(int userId) {
         Cursor cursor = null;
+        SQLiteDatabase db = null;
         try {
-            SQLiteDatabase db = mDatabaseHelper.getReadableDatabase();
+            db = mDatabaseHelper.getReadableDatabase();
             if ((cursor = db.query(TABLE,
                     new String[]{COLUMN_KEY, COLUMN_VALUE},
                     COLUMN_USER + "=?",
@@ -241,6 +244,7 @@ public class DatabaseCache {
             reportError("preload", e);
         } finally {
             if (cursor != null) cursor.close();
+            if (db != null) db.close();
         }
     }
 
