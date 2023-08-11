@@ -24,3 +24,18 @@ public static String getFormattedTime(long time) {
 
 String formattedTime = getFormattedTime(System.currentTimeMillis());
 ```
+
+### Calculate Boot Time
+
+```java
+import android.os.SystemClock;
+
+(...)
+
+long bootTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
+long bootTimeNanos = System.currentTimeMillis() * 1000000 - SystemClock.elapsedRealtimeNanos();
+
+// getFormattedTime() function illustrated above [ Date/Time - Format Time ]
+String formattedBootTime1 = getFormattedTime(bootTime);
+String formattedBootTime2 = getFormattedTime((bootTimeNanos/1000000));
+```
