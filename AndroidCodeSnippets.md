@@ -32,6 +32,8 @@ import android.os.SystemClock;
 
 (...)
 
+// [!] Note that System.currentTimeMillis() and SystemClock.elapsedRealtime() use
+// different clock, so use this code in way that you don't change local system time manually.
 long bootTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
 long bootTimeNanos = System.currentTimeMillis() * 1000000 - SystemClock.elapsedRealtimeNanos();
 
