@@ -36,8 +36,13 @@ import android.os.SystemClock;
 // different clock, so use this code in way that you don't change local system time manually.
 long bootTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
 long bootTimeNanos = System.currentTimeMillis() * 1000000 - SystemClock.elapsedRealtimeNanos();
+long currentTime = bootTime + SystemClock.elapsedRealtime();
+long currentTimeNanos = bootTimeNanos + SystemClock.elapsedRealtimeNanos();
 
 // getFormattedTime() function illustrated above [ Date/Time - Format Time ]
 String formattedBootTime1 = getFormattedTime(bootTime);
 String formattedBootTime2 = getFormattedTime((bootTimeNanos/1000000));
+
+String formattedCurrTime1 = getFormattedTime(currentTime);
+String formattedCurrTime2 = getFormattedTime((currentTimeNanos/1000000));
 ```
