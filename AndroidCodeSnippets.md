@@ -25,21 +25,24 @@ public static String getFormattedTime(long time) {
 String formattedTime = getFormattedTime(System.currentTimeMillis());
 ```
 
-### Calculate Boot Time
+### Calculate Boot Time and Current Time using Uptime
 
 ```java
 import android.os.SystemClock;
 
 (...)
 
-// [!] Note that System.currentTimeMillis() and SystemClock.elapsedRealtime() use
-// different clock, so use this code in way that you don't change local system time manually.
+/*
+ * Note that System.currentTimeMillis() and SystemClock.elapsedRealtime() use
+ * different clock, so use this code in way that you don't change local system time manually.
+ */
 long bootTime = System.currentTimeMillis() - SystemClock.elapsedRealtime();
 long bootTimeNanos = System.currentTimeMillis() * 1000000 - SystemClock.elapsedRealtimeNanos();
+
 long currentTime = bootTime + SystemClock.elapsedRealtime();
 long currentTimeNanos = bootTimeNanos + SystemClock.elapsedRealtimeNanos();
 
-// getFormattedTime() function illustrated above [ Date/Time - Format Time ]
+/* getFormattedTime() function illustrated above [ Date/Time - Format Time ] */
 String formattedBootTime1 = getFormattedTime(bootTime);
 String formattedBootTime2 = getFormattedTime((bootTimeNanos/1000000));
 
