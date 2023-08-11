@@ -6,6 +6,8 @@
 ## Date/Time
 
 ### Format Time
+
+```java
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,6 +21,5 @@ public static String getFormattedTime(long time) {
     return dateFormat.format(date);
 }
 
-(...)
-
 String formattedTime = getFormattedTime(System.currentTimeMillis()));
+```
