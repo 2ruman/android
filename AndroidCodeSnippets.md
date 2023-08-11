@@ -1,10 +1,10 @@
 # Android Code Snippets
 
 ### Contents
-+ Date/Time
++ [Date / Time](#date--time)
 <br>
 
-## Date/Time
+## Date / Time
 
 ### Format Time
 
