@@ -2,6 +2,7 @@
 
 ### Contents
 + Date/Time
+<br>
 
 ## Date/Time
 
@@ -21,5 +22,5 @@ public static String getFormattedTime(long time) {
     return dateFormat.format(date);
 }
 
-String formattedTime = getFormattedTime(System.currentTimeMillis()));
+String formattedTime = getFormattedTime(System.currentTimeMillis());
 ```
