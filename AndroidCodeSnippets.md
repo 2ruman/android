@@ -16,6 +16,12 @@ import java.util.Locale;
 
 (...)
 
+ /*
+  * Format Examples:
+  *     "yyyy-MM-dd HH:mm:ss.SSS  -->  2023-08-14 11:55:05.090
+  *     "MM/dd/yy hh:mm:ss a"     -->  08/14/23 11:53:52 AM
+  *     "yyyy년 MM월 dd일 E요일"      -->  2023년 08월 14일 Mon요일
+  */
 public static String getFormattedTime(long time) {
     Date date = new Date(time);
     Format dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US);
