@@ -13,8 +13,10 @@
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
-namespace android {
+#define DEBUG 0
+
 namespace truman {
+namespace android {
 
 static std::mutex g_initialized_mutex;
 static bool g_initialized;
@@ -80,9 +82,9 @@ static std::vector<std::string> convStrListToVec(JNIEnv *env, jobject arrayList)
     return result;
 }
 
-static jobject convStrVecToList(JNIEnv *env, std::vector<std::string> vec) {
+static jobject convStrVecToList(JNIEnv *env, const std::vector<std::string> &vec) {
     jobject result = env->NewObject(jclass_java_util_ArrayList, jctor_java_util_ArrayList, (jint) vec.size());
-    for (std::string s: vec) {
+    for (const auto &s: vec) {
         jstring element = env->NewStringUTF(s.c_str());
         env->CallBooleanMethod(result, jmethod_java_util_ArrayList_add, element);
         env->DeleteLocalRef(element);
@@ -90,9 +92,9 @@ static jobject convStrVecToList(JNIEnv *env, std::vector<std::string> vec) {
     return result;
 }
 
-static jobject convDataVecToList(JNIEnv *env, std::vector<basic_data_t> vec) {
+static jobject convDataVecToList(JNIEnv *env, const std::vector<basic_data_t> &vec) {
     jobject result = env->NewObject(jclass_java_util_ArrayList, jctor_java_util_ArrayList, (jint) vec.size());
-    for (auto d: vec) {
+    for (const auto &d: vec) {
         jobject element = env->NewObject(jclass_BasicData, jctor_BasicData,
                                          d.i_val_1, d.i_val_2, d.l_val_1, d.l_val_2);
         env->CallBooleanMethod(result, jmethod_java_util_ArrayList_add, element);
@@ -105,7 +107,7 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_truman_android_example_jniconversion_MyImplNative_nativeGetWelcomeMessage(JNIEnv *env,
                                                                                jclass clazz) {
-#ifdef DEBUG
+#if DEBUG
     LOGD("%s", __func__);
 #endif
     if (!g_initialized && !init_globals(env)) return nullptr;
@@ -117,7 +119,7 @@ extern "C"
 JNIEXPORT jobject JNICALL
 Java_truman_android_example_jniconversion_MyImplNative_nativeGetStrDataList(JNIEnv *env,
                                                                             jclass clazz) {
-#ifdef DEBUG
+#if DEBUG
     LOGD("%s", __func__);
 #endif
     if (!g_initialized && !init_globals(env)) return nullptr;
@@ -128,7 +130,7 @@ extern "C"
 JNIEXPORT jobject JNICALL
 Java_truman_android_example_jniconversion_MyImplNative_nativeGetDataList(JNIEnv *env,
                                                                          jclass clazz) {
-#ifdef DEBUG
+#if DEBUG
     LOGD("%s", __func__);
 #endif
     if (!g_initialized && !init_globals(env)) return nullptr;
@@ -139,7 +141,7 @@ extern "C"
 JNIEXPORT jint JNICALL
 Java_truman_android_example_jniconversion_MyImplNative_nativePrintStrList(JNIEnv *env, jclass clazz,
                                                                        jobject list) {
-#ifdef DEBUG
+#if DEBUG
     LOGD("%s", __func__);
 #endif
     if (!g_initialized && !init_globals(env)) return JNI_ERR;
@@ -151,5 +153,5 @@ Java_truman_android_example_jniconversion_MyImplNative_nativePrintStrList(JNIEnv
     return JNI_OK;
 }
 
-} // namespace truman
 } // namespace android
+} // namespace truman
