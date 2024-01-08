@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
         mBtFunc.setOnClickListener((v) -> func());
 
         MyDataAdapter.OnCheckedListener callback = (groupName, data) ->
-            print(String.format(
-                    "%s from %s is %s!\n",
-                    data.getData(), groupName, data.getState() ? "selected" : "unselected"));
+                print(String.format(
+                        "%s from %s is %s!\n",
+                        data.getData(), groupName, data.getState() ? "selected" : "unselected"));
 
         mAdapter = new MyDataAdapter(this, callback);
 
@@ -76,11 +76,11 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             mTvStatus.setText("");
             dataMap.forEach((group, groupData) -> {
-                mTvStatus.append(String .format("[ %s ]\n", group));
+                mTvStatus.append(String.format("[ %s ]\n", group));
                 groupData.forEach((data) ->
-                    mTvStatus.append(String.format(" - %s (%s)\n",
-                            data.getData(),
-                            data.getState() ? "v" : " ")));
+                        mTvStatus.append(String.format(" - %s (%s)\n",
+                                data.getData(),
+                                data.getState() ? "v" : " ")));
             });
         });
     }

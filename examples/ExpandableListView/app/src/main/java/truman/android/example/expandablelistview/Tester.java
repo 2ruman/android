@@ -7,7 +7,7 @@ public class Tester {
         adapter.add("A Class", new MyData("Bob"));
         adapter.add("A Class", new MyData("Charlie"));
         adapter.add("B Class", new MyData("Dave"));
-        adapter.add("B Class", new MyData("Eve",true));
+        adapter.add("B Class", new MyData("Eve", true));
         adapter.add("B Class", new MyData("Frank", true));
         adapter.add("B Class", new MyData("Grace"));
         adapter.add("B Class", new MyData("Heidi"));
