@@ -8,108 +8,60 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class MyDataAdapter extends BaseExpandableListAdapter {
 
-    private final Context mContext;
-    private final List<String> mGroup;
-    private final Map<String, List<MyData>> mGroupData;
-    private final OnCheckedListener mCallback;
+    private final GroupDataManager<MyData> mGroupDataManager;
+    private final LayoutInflater mLayoutInflater;
+    private final Optional<OnCheckedListener> mCallback;
 
     public MyDataAdapter(Context context, OnCheckedListener callback) {
-        mContext = context;
-        mGroup = new ArrayList<>();
-        mGroupData = new LinkedHashMap<>();
-        mCallback = callback;
+        mGroupDataManager = new GroupDataManager<>();
+        mLayoutInflater = LayoutInflater.from(context);
+        mCallback = Optional.of(callback);
     }
 
-    public void add(String groupName, MyData data) {
-        ensureGroup(groupName);
-        addToGroup(groupName, data);
+    public void add(String group, MyData data) {
+        mGroupDataManager.add(group, data);
     }
 
-    private void ensureGroup(String groupName) {
-        if (!mGroup.contains(groupName)) {
-            mGroup.add(groupName);
-            mGroupData.put(groupName, new ArrayList<>());
-        }
-    }
-
-    private void addToGroup(String groupName, MyData data) {
-        List<MyData> groupData = getGroupData(groupName);
-        for (MyData md : groupData) {
-            if (md.getData() == data.getData()) {
-                return;
-            }
-        }
-        groupData.add(data);
-    }
-
-    public MyData getData(int groupPosition, int childPosition) {
-        MyData ret = null;
-        try {
-            ret = (MyData) getChild(groupPosition, childPosition);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ret;
+    public int getGroupPosition(String group) {
+        return mGroupDataManager.getIndexOf(group);
     }
 
     public Map<String, List<MyData>> getDataAsMap() {
-        return Collections.unmodifiableMap(mGroupData);
-    }
-
-    private List<MyData> getGroupData(int groupPosition) {
-        String groupName = convPositionToGroup(groupPosition);
-        return getGroupData(groupName);
-    }
-
-    private String convPositionToGroup(int position) {
-        String ret;
-        try {
-            ret = mGroup.get(position);
-        } catch (IndexOutOfBoundsException e) {
-            throw new RuntimeException("Group doesn't exist at " + position);
-        }
-        return ret;
-    }
-
-    public int convGroupToPosition(String groupName) {
-        return mGroup.indexOf(groupName);
-    }
-
-    private List<MyData> getGroupData(String groupName) {
-        return mGroupData.get(groupName);
+        return mGroupDataManager.getDataAsMap();
     }
 
     @Override
     public int getGroupCount() {
-        return mGroup.size();
+        return mGroupDataManager.getGroupCount();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        List<MyData> groupData = getGroupData(groupPosition);
-        return groupData.size();
+        return mGroupDataManager.getGroupDataCountAt(groupPosition);
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return getGroupName(groupPosition);
+        return getGroupAt(groupPosition);
     }
 
-    public String getGroupName(int groupPosition) {
-        return mGroup.get(groupPosition);
+    public String getGroupAt(int groupPosition) {
+        return mGroupDataManager.getGroupAt(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return getGroupData(groupPosition).get(childPosition);
+        return getChildAt(groupPosition, childPosition);
+    }
+
+    public MyData getChildAt(int groupPosition, int childPosition) {
+        return mGroupDataManager.getDataAt(groupPosition, childPosition);
     }
 
     @Override
@@ -130,12 +82,12 @@ public class MyDataAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
-        String groupName = (String) getGroup(groupPosition);
+        String group = (String) getGroup(groupPosition);
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.list_group, null);
+            convertView = mLayoutInflater.inflate(R.layout.list_group, null);
         }
         TextView tvGroup = convertView.findViewById(R.id.tv_group);
-        tvGroup.setText(groupName);
+        tvGroup.setText(group);
         return convertView;
     }
 
@@ -144,26 +96,24 @@ public class MyDataAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
         final MyData data = (MyData) getChild(groupPosition, childPosition);
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.list_child, null);
+            convertView = mLayoutInflater.inflate(R.layout.list_child, null);
         }
+
         CheckBox cbChild = convertView.findViewById(R.id.cb_child);
         cbChild.setOnCheckedChangeListener(null);
         cbChild.setChecked(data.getState());
         cbChild.setOnCheckedChangeListener((v, isChecked) -> {
             data.setState(isChecked);
-            if (getCallback() != null) {
-                String groupName = getGroupName(groupPosition);
-                getCallback().onChecked(groupName, data);
-            }
+            mCallback.ifPresent(cb -> {
+                String group = (String) getGroup(groupPosition);
+                cb.onChecked(group, data);
+            });
         });
+        cbChild.setVisibility(data.isStateful() ? View.VISIBLE : View.INVISIBLE);
 
         TextView tvChild = convertView.findViewById(R.id.tv_child);
-        tvChild.setText(data.getData());
+        tvChild.setText(data.get());
         return convertView;
-    }
-
-    private OnCheckedListener getCallback() {
-        return mCallback;
     }
 
     @Override
@@ -173,6 +123,6 @@ public class MyDataAdapter extends BaseExpandableListAdapter {
 
     @FunctionalInterface
     public interface OnCheckedListener {
-        void onChecked(String groupName, MyData data);
+        void onChecked(String group, MyData data);
     }
 }

@@ -1,6 +1,7 @@
 package truman.android.example.expandablelistview;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -24,31 +25,34 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mTvStatus = findViewById(R.id.tv_status);
+        mTvStatus.setMovementMethod(new ScrollingMovementMethod());
 
         mBtTest = findViewById(R.id.bt_test);
-        mBtTest.setOnClickListener((v) -> test());
+        mBtTest.setOnClickListener(v -> test());
 
         mBtFunc = findViewById(R.id.bt_func);
-        mBtFunc.setOnClickListener((v) -> func());
+        mBtFunc.setOnClickListener(v -> func());
 
-        MyDataAdapter.OnCheckedListener callback = (groupName, data) ->
-                print(String.format(
-                        "%s from %s is %s!\n",
-                        data.getData(), groupName, data.getState() ? "selected" : "unselected"));
+        MyDataAdapter.OnCheckedListener callback = (group, data) ->
+                print(String.format("%s from %s is %s!",
+                        data.get(), group, data.getState() ? "selected" : "unselected"));
 
         mAdapter = new MyDataAdapter(this, callback);
 
         mExpandableListView = findViewById(R.id.expandableListView);
         mExpandableListView.setAdapter(mAdapter);
-        mExpandableListView.setOnGroupExpandListener((groupPosition) -> {
-            String groupName = mAdapter.getGroupName(groupPosition);
-            print(String.format(
-                    "%s expanded!\n", groupName));
+        mExpandableListView.setOnGroupExpandListener(groupPosition -> {
+            String group = mAdapter.getGroupAt(groupPosition);
+            print(String.format("%s expanded!", group));
         });
-        mExpandableListView.setOnGroupCollapseListener((groupPosition) -> {
-            String groupName = mAdapter.getGroupName(groupPosition);
-            print(String.format(
-                    "%s collapsed!\n", groupName));
+        mExpandableListView.setOnGroupCollapseListener(groupPosition -> {
+            String group = mAdapter.getGroupAt(groupPosition);
+            print(String.format("%s collapsed!", group));
+        });
+        mExpandableListView.setOnChildClickListener((p, v, groupPosition, childPosition, id) -> {
+            MyData data = mAdapter.getChildAt(groupPosition, childPosition);
+            print(String.format("%s clicked!", data.get()));
+            return false;
         });
 
         Tester.fillData(mAdapter);
@@ -60,13 +64,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void test() {
-        String groupName = "D Class";
+        String group = "E Class";
         String data = "Who are you?";
         runOnUiThread(() -> {
-            mAdapter.add(groupName, new MyData(data, true));
+            mAdapter.add(group, new MyData(data, true));
             mAdapter.notifyDataSetChanged();
 
-            int position = mAdapter.convGroupToPosition(groupName);
+            int position = mAdapter.getGroupPosition(group);
             mExpandableListView.expandGroup(position, true);
         });
     }
@@ -76,11 +80,13 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             mTvStatus.setText("");
             dataMap.forEach((group, groupData) -> {
-                mTvStatus.append(String.format("[ %s ]\n", group));
-                groupData.forEach((data) ->
-                        mTvStatus.append(String.format(" - %s (%s)\n",
-                                data.getData(),
-                                data.getState() ? "v" : " ")));
+                mTvStatus.append(String.format("[ %s ]", group));
+                mTvStatus.append(System.lineSeparator());
+                groupData.forEach(data ->
+                        mTvStatus.append(String.format(" - %s (%s)%s",
+                                data.get(),
+                                data.getState() ? "v" : " ",
+                                System.lineSeparator())));
             });
         });
     }

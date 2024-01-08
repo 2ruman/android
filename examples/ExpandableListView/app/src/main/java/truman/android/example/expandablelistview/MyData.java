@@ -3,17 +3,23 @@ package truman.android.example.expandablelistview;
 public final class MyData {
     private String data;
     private boolean state;
+    private boolean stateful;
 
     public MyData(String data) {
         this(data, false);
     }
 
     public MyData(String data, boolean state) {
-        this.data = data;
-        this.state = state;
+        this(data, state, true);
     }
 
-    public String getData() {
+    public MyData(String data, boolean state, boolean stateful) {
+        this.data = data;
+        this.state = state;
+        this.stateful = stateful;
+    }
+
+    public String get() {
         return data;
     }
 
@@ -24,5 +30,18 @@ public final class MyData {
     public MyData setState(boolean state) {
         this.state = state;
         return this;
+    }
+
+    public boolean isStateful() {
+        return stateful;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof MyData) && equals((MyData) obj);
+    }
+
+    private boolean equals(MyData that) {
+        return this.data.equals(that.data);
     }
 }

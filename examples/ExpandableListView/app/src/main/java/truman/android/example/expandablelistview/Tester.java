@@ -15,5 +15,8 @@ public class Tester {
         adapter.add("C Class", new MyData("Judy", true));
         adapter.add("C Class", new MyData("Mallory"));
         adapter.add("C Class", new MyData("Oscar"));
+        adapter.add("D Class", new MyData("Peggy", false, false));
+        adapter.add("D Class", new MyData("Quentin", false, false));
+        adapter.add("D Class", new MyData("Romeo", false, false));
     }
 }
