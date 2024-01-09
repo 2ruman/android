@@ -21,7 +21,7 @@ public class MyDataAdapter extends BaseExpandableListAdapter {
     public MyDataAdapter(Context context, OnCheckedListener callback) {
         mGroupDataManager = new GroupDataManager<>();
         mLayoutInflater = LayoutInflater.from(context);
-        mCallback = Optional.of(callback);
+        mCallback = Optional.ofNullable(callback);
     }
 
     public void add(String group, MyData data) {
