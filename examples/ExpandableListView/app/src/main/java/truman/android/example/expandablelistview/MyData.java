@@ -4,6 +4,7 @@ public final class MyData {
     private String data;
     private boolean state;
     private boolean stateful;
+    private Object tag;
 
     public MyData(String data) {
         this(data, false);
@@ -29,6 +30,15 @@ public final class MyData {
 
     public MyData setState(boolean state) {
         this.state = state;
+        return this;
+    }
+
+    public Object getTag() {
+        return tag;
+    }
+
+    public MyData setTag(Object tag) {
+        this.tag = tag;
         return this;
     }
 
