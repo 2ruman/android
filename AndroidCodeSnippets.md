@@ -2,6 +2,7 @@
 
 ### Contents
 + [Date / Time](#date--time)
++ [Process](#process)
 <br>
 
 ## Date / Time
@@ -55,3 +56,14 @@ String formattedBootTime2 = getFormattedTime((bootTimeNanos/1000000));
 String formattedCurrTime1 = getFormattedTime(currentTime);
 String formattedCurrTime2 = getFormattedTime((currentTimeNanos/1000000));
 ```
+
+## Process
+
+### Kill Myself
+
+```java
+public static void killMyself() {
+    android.os.Process.killProcess(android.os.Process.myPid());
+}
+```
+
