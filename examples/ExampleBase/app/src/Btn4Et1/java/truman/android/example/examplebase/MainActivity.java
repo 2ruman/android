@@ -1,8 +1,11 @@
 package truman.android.example.examplebase;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -80,11 +83,18 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
     public void clear() {
         runOnUiThread(() -> {
             mEtInput.setText("");
+            mEtInput.clearFocus();
+            hideKeyboard(mEtInput);
             mTvStatus.setText("");
         });
     }
 
     private static String nullSafe(String s) {
         return s != null ? s : "";
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
