@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 /**
  * Author  : Truman
  * Contact : truman.t.kim@gmail.com
- * Version : 1.1.0
  */
 public class MainActivity extends AppCompatActivity implements Ui.Out {
 
@@ -20,8 +19,6 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
 
     private TextView mTvStatus;
 
-    private volatile int mClickCount = 0; // Test val
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +26,10 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
 
         Log.d(TAG, "onCreate()");
 
+        Button startBtn = findViewById(R.id.btn_start);
+        startBtn.setOnClickListener((v) -> start());
+        Button stopBtn = findViewById(R.id.btn_stop);
+        stopBtn.setOnClickListener((v) -> stop());
         Button runBtn = findViewById(R.id.btn_run);
         runBtn.setOnClickListener((v) -> run());
         Button resetBtn = findViewById(R.id.btn_reset);
@@ -40,15 +41,23 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
         Ui.setOut(this);
     }
 
+    private void start() {
+        Log.d(TAG, "start() - Inside");
+        println("Start service");
+    }
+
+    private void stop() {
+        Log.d(TAG, "stop() - Inside");
+        println("Stop service");
+    }
+
     private void run() {
         Log.d(TAG, "run() - Inside");
-        mClickCount++;
-        println("Click count("+(mClickCount)+")");
+        println("Run tester");
     }
 
     private void reset() {
         Log.d(TAG, "reset() - Inside");
-        mClickCount = 0;
         clear();
     }
 

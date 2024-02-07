@@ -10,8 +10,8 @@ android {
         applicationId "truman.android.example.examplebase"
         minSdk 29
         targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1.0"
     }
 
     buildTypes {
@@ -20,15 +20,36 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+    }
+
+    flavorDimensions "composition"
+    productFlavors {
+        Btn2 {
+            dimension "composition"
+            versionNameSuffix '-btn2'
+        }
+        Btn4 {
+            dimension "composition"
+            versionNameSuffix '-btn4'
+        }
+        Btn4Et1 {
+            dimension "composition"
+            versionNameSuffix '-btn4-et1'
+        }
+        Btn5 {
+            dimension "composition"
+            versionNameSuffix '-btn5'
+        }
     }
 }
 
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
