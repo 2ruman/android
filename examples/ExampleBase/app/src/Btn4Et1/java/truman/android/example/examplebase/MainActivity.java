@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
     private void func() {
         Log.d(TAG, "func() - Inside");
         String text = mEtInput.getText().toString();
-        println("You input {" + System.lineSeparator() + text + System.lineSeparator() + "}");
+        println("You input {" + System.lineSeparator() + "\t\t" + text + System.lineSeparator() + "}");
     }
 
     private void run() {

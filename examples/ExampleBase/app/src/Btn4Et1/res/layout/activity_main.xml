@@ -28,7 +28,8 @@
             android:layout_height="match_parent"
             android:ems="10"
             android:inputType="text"
-            android:hint="Input text..."/>
+            android:hint="Input text..."
+            android:importantForAutofill="no" />
     </LinearLayout>
 
     <LinearLayout
