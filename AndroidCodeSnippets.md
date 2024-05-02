@@ -3,6 +3,7 @@
 ### Contents
 + [Date / Time](#date--time)
 + [Process](#process)
++ [System](#system)
 <br>
 
 ## Date / Time
@@ -67,3 +68,10 @@ public static void killMyself() {
 }
 ```
 
+## System
+
+### Get Kernel Version
+
+```java
+String kernelVersion = Os.uname().release;
+```
