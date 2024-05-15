@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_package_name">truman.android.example.remoteservice</string>
+    <string name="service_package_name">truman.android.example.remoteservice.server</string>
+    <string name="service_class_name">truman.android.example.remoteservice.server.MyRemoteService</string>
+    <string name="bind_action">truman.android.example.remoteservice.BIND_SERVICE</string>
+</resources>

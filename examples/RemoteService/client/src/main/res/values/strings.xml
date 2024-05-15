@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">RemoteService_Client</string>
+    <string name="service_package_name">truman.android.example.remoteservice.server</string>
+</resources>
