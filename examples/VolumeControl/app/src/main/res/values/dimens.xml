@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="auto_size_min_text_size">16sp</dimen>
+    <dimen name="auto_size_max_text_size">200sp</dimen>
+    <dimen name="auto_size_step_granularity">1sp</dimen>
+</resources>
