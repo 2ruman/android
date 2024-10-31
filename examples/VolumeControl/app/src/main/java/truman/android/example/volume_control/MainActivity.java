@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         mBtnUp = findViewById(R.id.btnUp);
-        mBtnUp.setOnClickListener((v) -> volumeUp());
+        mBtnUp.setOnClickListener((v) -> raiseMediaVolume());
 
         mBtnDown = findViewById(R.id.btnDown);
-        mBtnDown.setOnClickListener((v) -> volumeDown());
+        mBtnDown.setOnClickListener((v) -> lowerMediaVolume());
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             setAutoSizeText(this, mBtnUp);
@@ -44,12 +44,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void volumeUp() {
+    private void raiseMediaVolume() {
         mAudioManager.adjustStreamVolume(
                 AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
     }
 
-    private void volumeDown() {
+    private void lowerMediaVolume() {
         mAudioManager.adjustStreamVolume(
                 AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
     }
