@@ -15,9 +15,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AudioManager mAudioManager;
 
-    private Button mBtnUp;
-    private Button mBtnDown;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,15 +29,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        mBtnUp = findViewById(R.id.btnUp);
-        mBtnUp.setOnClickListener((v) -> raiseMediaVolume());
+        Button btnUp = findViewById(R.id.btnUp);
+        Button btnDown = findViewById(R.id.btnDown);
 
-        mBtnDown = findViewById(R.id.btnDown);
-        mBtnDown.setOnClickListener((v) -> lowerMediaVolume());
+        btnUp.setOnClickListener((v) -> raiseMediaVolume());
+        btnDown.setOnClickListener((v) -> lowerMediaVolume());
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            setAutoSizeText(this, mBtnUp);
-            setAutoSizeText(this, mBtnDown);
+            setAutoSizeText(this, btnUp);
+            setAutoSizeText(this, btnDown);
         }
     }
 
