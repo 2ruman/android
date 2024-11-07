@@ -3,6 +3,7 @@
 ### Contents
 + [Date / Time](#date--time)
 + [Process](#process)
++ [Screen / View](#screen--view)
 + [System](#system)
 <br>
 
@@ -65,6 +66,52 @@ String formattedCurrTime2 = getFormattedTime((currentTimeNanos/1000000));
 ```java
 public static void killMyself() {
     android.os.Process.killProcess(android.os.Process.myPid());
+}
+```
+
+## Screen / View
+
+### Get Window Size / Get Screen Size
+
+```java
+import android.content.Context;
+import android.os.Build;
+import android.util.DisplayMetrics;
+import android.util.Pair;
+import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
+
+(...)
+
+public static Pair<Integer, Integer> getWindowSize(@NonNull Context context) {
+    WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    int widthPx, heightPx;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        widthPx = wm.getCurrentWindowMetrics().getBounds().width();
+        heightPx = wm.getCurrentWindowMetrics().getBounds().height();
+    } else {
+        DisplayMetrics metrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(metrics);
+        widthPx = metrics.widthPixels;
+        heightPx = metrics.heightPixels;
+    }
+    return new Pair<>(Math.abs(widthPx), Math.abs(heightPx));
+}
+
+public static Pair<Integer, Integer> getScreenSize(@NonNull Context context) {
+    WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    int widthPx, heightPx;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        widthPx = wm.getMaximumWindowMetrics().getBounds().width();
+        heightPx = wm.getMaximumWindowMetrics().getBounds().height();
+    } else {
+        DisplayMetrics metrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getRealMetrics(metrics);
+        widthPx = metrics.widthPixels;
+        heightPx = metrics.heightPixels;
+    }
+    return new Pair<>(Math.abs(widthPx), Math.abs(heightPx));
 }
 ```
 
