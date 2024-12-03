@@ -27,6 +27,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void invoke() {
         int result = SystemCall.setUid(android.os.Process.myUid());
+//        int result = SystemCall.setReuid(android.os.Process.myUid(),
+//                                         android.os.Process.myUid());
+//        int result = SystemCall.setResuid(android.os.Process.myUid(),
+//                                          android.os.Process.myUid(),
+//                                          android.os.Process.myUid());
+//        int result = SystemCall.setResgid(android.os.Process.myUid(),
+//                                          android.os.Process.myUid(),
+//                                          android.os.Process.myUid());
         Log.d(TAG, "invoke() - result = " + result);
     }
 
