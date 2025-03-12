@@ -71,6 +71,32 @@ public static void killMyself() {
 
 ## Screen / View
 
+### Fullscreen Mode
+
+```java
+import android.graphics.Color;
+import android.os.Build;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
+
+(...in Activity...)
+
+@Override
+protected void onResume() {
+    super.onResume();
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        getWindow().setDecorFitsSystemWindows(false);
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+
+        WindowInsetsController controller = getWindow().getInsetsController();
+        if (controller != null) {
+            controller.hide(WindowInsets.Type.navigationBars());
+        }
+    }
+}
+```
+
 ### Get Window Size / Get Screen Size
 
 ```java
