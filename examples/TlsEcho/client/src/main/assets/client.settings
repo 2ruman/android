@@ -1,0 +1,4 @@
+# Client Settings
+server.ip=192.168.0.1
+server.port=12345
+client.ks.password=cpassword
