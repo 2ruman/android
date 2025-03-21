@@ -7,10 +7,10 @@
 - JDK : _OpenJDK 17.0.14_
 
 ## Note
-The client socket could be disconnected while the application process goes into background
-(falling into idle state), which is because of a battery optimization policy which is enforced
-by default on some android devices. So, it's required to request the package to be included
-to the except list, or some adb command is available as below.
+When the application process moves to the background(entering an idle state), the client socket
+may disconnect due to a battery optimization policy that is enabled by default on some Android devices,
+so if you want to keep the connection alive, you need to request the package to be added to
+the exception list or use the following adb commands:
 
 ```
 // Check
