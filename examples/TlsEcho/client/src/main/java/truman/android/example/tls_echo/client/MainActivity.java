@@ -1,6 +1,11 @@
 package truman.android.example.tls_echo.client;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.EditText;
@@ -34,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
 
         initViews();
         initClient();
+
+        requestIgnoreBatteryOpt();
     }
 
     private void initViews() {
@@ -104,5 +111,21 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
 
     private static String nullSafe(String s) {
         return s != null ? s : "";
+    }
+
+    @SuppressLint("BatteryLife")
+    public void requestIgnoreBatteryOpt() {
+        PowerManager pm= (PowerManager) getSystemService(Context.POWER_SERVICE);
+        String packageName = getPackageName();
+        if (pm.isIgnoringBatteryOptimizations(packageName)) {
+            println("Already ignoring battery optimizations: " + packageName);
+        } else {
+            println("Request for ignoring battery optimizations: " + packageName);
+            Intent intent = new Intent();
+            intent.setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + getPackageName()));
+            startActivity(intent);
+        }
+
     }
 }
