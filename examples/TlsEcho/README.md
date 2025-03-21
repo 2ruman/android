@@ -12,13 +12,13 @@ The client socket could be disconnected while the application process goes into 
 by default on some android devices. So, it's required to request the package to be included
 to the except list, or some adb command is available as below.
 
-'''java
+```
 // Check
-adb shell dumpsys deviceidle whitelist
+$ adb shell dumpsys deviceidle whitelist
 
 // Add
-adb shell dumpsys deviceidle whitelist +truman.android.example.tls_echo.client
+$ adb shell dumpsys deviceidle whitelist +truman.android.example.tls_echo.client
 
 // Remove
-adb shell dumpsys deviceidle whitelist -truman.android.example.tls_echo.client
-'''
+$ adb shell dumpsys deviceidle whitelist -truman.android.example.tls_echo.client
+```
