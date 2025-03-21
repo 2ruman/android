@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
 
     private void send() {
         String message = etInput.getText().toString();
+        ensureConnection();
         client.send(message);
     }
 
@@ -87,6 +88,10 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
 
     private void close() {
         client.close();
+    }
+
+    private void ensureConnection() {
+        client.open().await();
     }
 
     @Override

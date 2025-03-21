@@ -42,6 +42,15 @@ public class Client {
         SSLSocket serverSocket;
         ObjectInputStream ois;
         ObjectOutputStream oos;
+        Waiter waiter;
+
+        Connector() {
+            this.waiter = Waiter.create(true);
+        }
+
+        Connector(Waiter waiter) {
+            this.waiter = waiter;
+        }
 
         void send(Packet packet) {
             try {
@@ -62,6 +71,7 @@ public class Client {
                 oos = new ObjectOutputStream(serverSocket.getOutputStream());
                 ois = new ObjectInputStream(serverSocket.getInputStream());
 
+                waiter.release();
                 callback.onConnected(serverSocket);
 
                 while (true) {
@@ -69,6 +79,7 @@ public class Client {
                 }
             } catch (IOException | KeyStoreException | CertificateException |
                      NoSuchAlgorithmException | KeyManagementException | ClassNotFoundException e) {
+                waiter.release();
                 onError(e);
             }
         }
@@ -80,11 +91,13 @@ public class Client {
         }
     }
 
-    public void open() {
+    public Waiter open() {
         synchronized (cLock) {
+            Waiter waiter = Waiter.create(connector != null);
             if (connector == null) {
-                executorService.execute(connector = new Connector());
+                executorService.execute(connector = new Connector(waiter));
             }
+            return waiter;
         }
     }
 
