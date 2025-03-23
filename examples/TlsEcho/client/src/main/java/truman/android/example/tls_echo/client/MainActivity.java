@@ -21,7 +21,7 @@ import truman.android.example.tls_echo.common.Message;
 public class MainActivity extends AppCompatActivity implements Ui.Out {
 
     private static final String TAG ="MainActivity.2ruman";
-
+    private static final boolean MUTE_ERROR = true;
     private EditText etInput;
     private TextView tvStatus;
     private Settings settings;
@@ -66,7 +66,9 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
 
             @Override
             public void onError(Exception e) {
-                println("Error detected: " + e);
+                if (!MUTE_ERROR) {
+                    println("Error detected: " + e);
+                }
             }
 
             @Override

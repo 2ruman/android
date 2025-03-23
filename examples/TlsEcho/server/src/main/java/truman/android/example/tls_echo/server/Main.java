@@ -8,6 +8,9 @@ import truman.android.example.tls_echo.common.Callback;
 import truman.android.example.tls_echo.common.Message;
 
 public class Main {
+
+    private static final boolean MUTE_ERROR = true;
+
     private void openServer(int port, String password) {
         Server server = new Server(port, password, new Callback() {
             @Override
@@ -17,7 +20,9 @@ public class Main {
 
             @Override
             public void onError(Exception e) {
-                out.println("Error detected: " + e);
+                if (!MUTE_ERROR) {
+                    out.println("Error detected: " + e);
+                }
             }
 
             @Override
