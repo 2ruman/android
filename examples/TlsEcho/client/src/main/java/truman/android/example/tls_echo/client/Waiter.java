@@ -7,7 +7,7 @@ public class Waiter {
     private final CountDownLatch countDownLatch;
 
     private Waiter(boolean bypass) {
-        countDownLatch = (!bypass) ? new CountDownLatch(1) : null;
+        countDownLatch = new CountDownLatch(bypass ? 0 : 1);
     }
 
     public static Waiter create() {
@@ -19,16 +19,12 @@ public class Waiter {
     }
 
     public void release() {
-        if (countDownLatch != null) {
-            countDownLatch.countDown();
-        }
+        countDownLatch.countDown();
     }
 
     public void await() {
-        if (countDownLatch != null) {
-            try {
-                countDownLatch.await();
-            } catch (InterruptedException ignored) {}
-        }
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException ignored) {}
     }
 }
