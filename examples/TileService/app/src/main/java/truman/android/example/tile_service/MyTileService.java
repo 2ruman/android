@@ -1,5 +1,6 @@
 package truman.android.example.tile_service;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.service.quicksettings.Tile;
@@ -35,9 +36,7 @@ public class MyTileService extends TileService {
             unlockAndRun();
             return;
         }
-        getAndToggle((state) -> {
-            Log.d(TAG, "onClick() - state? " + state);
-        });
+        getAndToggle((state) -> Log.d(TAG, "onClick() - state? " + state));
     }
 
     private void getAndToggle(Consumer<Integer> stateConsumer) {
@@ -62,13 +61,12 @@ public class MyTileService extends TileService {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void showState(int state) {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.my_dialog);
         dialog.setTitle("State Changed");
-        dialog.findViewById(R.id.btn_confirm).setOnClickListener((v) -> {
-            dialog.dismiss();
-        });
+        dialog.findViewById(R.id.btn_confirm).setOnClickListener((v) -> dialog.dismiss());
         ((TextView)dialog.findViewById(R.id.tv_dialog_message))
                 .setText("Feature turned " + ((state == Tile.STATE_ACTIVE) ? "on" : "off"));
         showDialog(dialog);
