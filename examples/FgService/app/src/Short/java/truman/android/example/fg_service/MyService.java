@@ -57,6 +57,12 @@ public class MyService extends Service {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy()");
+    }
+
     private void becomeForeground() {
         Log.d(TAG, "becomeForeground() - SDK :" + Build.VERSION.SDK_INT);
 
