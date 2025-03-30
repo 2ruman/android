@@ -64,8 +64,12 @@ public class TbService extends Service {
     }
 
     private void initUpperView(View parent) {
-        View vUpper = parent.findViewById(R.id.v_blocker_upper);
         SeekBar sbAlpha = parent.findViewById(R.id.sb_alpha);
+        int initProgress = sbAlpha.getProgress();
+
+        View vUpper = parent.findViewById(R.id.v_blocker_upper);
+        vUpper.setAlpha(initProgress / 100f);
+
         sbAlpha.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
