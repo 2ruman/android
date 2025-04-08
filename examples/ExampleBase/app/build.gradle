@@ -26,6 +26,10 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     flavorDimensions "composition"
     productFlavors {
         Btn2 {
