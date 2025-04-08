@@ -3,10 +3,10 @@ package truman.android.example.examplebase;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import truman.android.example.examplebase.databinding.ActivityMainBinding;
 
 /**
  * Author  : Truman
@@ -17,30 +17,28 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
     private static final String TAG_SUFFIX = ".2ruman"; // For grep
     private static final String TAG = "MainActivity" +  TAG_SUFFIX;
 
-    private TextView mTvStatus;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         Log.d(TAG, "onCreate()");
 
-        Button startBtn = findViewById(R.id.btn_start);
-        startBtn.setOnClickListener((v) -> start());
-        Button stopBtn = findViewById(R.id.btn_stop);
-        stopBtn.setOnClickListener((v) -> stop());
-        Button setupBtn = findViewById(R.id.btn_setup);
-        setupBtn.setOnClickListener((v) -> setup());
-        Button resetBtn = findViewById(R.id.btn_reset);
-        resetBtn.setOnClickListener((v) -> reset());
-        Button runBtn = findViewById(R.id.btn_run);
-        runBtn.setOnClickListener((v) -> run());
-
-        mTvStatus = findViewById(R.id.tv_status);
-        mTvStatus.setMovementMethod(new ScrollingMovementMethod());
-
+        initViews();
         Ui.setOut(this);
+    }
+
+    private void initViews() {
+        binding.btnStart.setOnClickListener((v) -> start());
+        binding.btnStop.setOnClickListener((v) -> stop());
+        binding.btnSetup.setOnClickListener((v) -> setup());
+        binding.btnReset.setOnClickListener((v) -> reset());
+        binding.btnRun.setOnClickListener((v) -> run());
+        binding.tvStatus.setMovementMethod(new ScrollingMovementMethod());
     }
 
     private void start() {
@@ -70,17 +68,17 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
 
     @Override
     public void print(String s) {
-        runOnUiThread(() -> mTvStatus.append(nullSafe(s)));
+        runOnUiThread(() -> binding.tvStatus.append(nullSafe(s)));
     }
 
     @Override
     public void println(String s) {
-        runOnUiThread(() -> mTvStatus.append(nullSafe(s) + System.lineSeparator()));
+        runOnUiThread(() -> binding.tvStatus.append(nullSafe(s) + System.lineSeparator()));
     }
 
     @Override
     public void clear() {
-        runOnUiThread(() -> mTvStatus.setText(""));
+        runOnUiThread(() -> binding.tvStatus.setText(""));
     }
 
     private static String nullSafe(String s) {

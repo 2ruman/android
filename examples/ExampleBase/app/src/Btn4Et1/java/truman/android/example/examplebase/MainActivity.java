@@ -6,11 +6,10 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import truman.android.example.examplebase.databinding.ActivityMainBinding;
 
 /**
  * Author  : Truman
@@ -21,31 +20,27 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
     private static final String TAG_SUFFIX = ".2ruman"; // For grep
     private static final String TAG = "MainActivity" +  TAG_SUFFIX;
 
-    private EditText mEtInput;
-    private TextView mTvStatus;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         Log.d(TAG, "onCreate()");
 
-        Button setupBtn = findViewById(R.id.btn_setup);
-        setupBtn.setOnClickListener((v) -> setup());
-        Button funcBtn = findViewById(R.id.btn_func);
-        funcBtn.setOnClickListener((v) -> func());
-        Button runBtn = findViewById(R.id.btn_run);
-        runBtn.setOnClickListener((v) -> run());
-        Button resetBtn = findViewById(R.id.btn_reset);
-        resetBtn.setOnClickListener((v) -> reset());
-
-        mEtInput = findViewById(R.id.et_input);
-
-        mTvStatus = findViewById(R.id.tv_status);
-        mTvStatus.setMovementMethod(new ScrollingMovementMethod());
-
+        initViews();
         Ui.setOut(this);
+    }
+
+    private void initViews() {
+        binding.btnSetup.setOnClickListener((v) -> setup());
+        binding.btnFunc.setOnClickListener((v) -> func());
+        binding.btnRun.setOnClickListener((v) -> run());
+        binding.btnReset.setOnClickListener((v) -> reset());
+        binding.tvStatus.setMovementMethod(new ScrollingMovementMethod());
     }
 
     private void setup() {
@@ -60,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
 
     private void func() {
         Log.d(TAG, "func() - Inside");
-        String text = mEtInput.getText().toString();
+        String text = binding.etInput.getText().toString();
         println("You input {" + System.lineSeparator() + "\t\t" + text + System.lineSeparator() + "}");
     }
 
@@ -71,21 +66,21 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
 
     @Override
     public void print(String s) {
-        runOnUiThread(() -> mTvStatus.append(nullSafe(s)));
+        runOnUiThread(() -> binding.tvStatus.append(nullSafe(s)));
     }
 
     @Override
     public void println(String s) {
-        runOnUiThread(() -> mTvStatus.append(nullSafe(s) + System.lineSeparator()));
+        runOnUiThread(() -> binding.tvStatus.append(nullSafe(s) + System.lineSeparator()));
     }
 
     @Override
     public void clear() {
         runOnUiThread(() -> {
-            mEtInput.setText("");
-            mEtInput.clearFocus();
-            hideKeyboard(mEtInput);
-            mTvStatus.setText("");
+            binding.etInput.setText("");
+            binding.etInput.clearFocus();
+            hideKeyboard(binding.etInput);
+            binding.tvStatus.setText("");
         });
     }
 
