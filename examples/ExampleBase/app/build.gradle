@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace 'truman.android.example.examplebase'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "truman.android.example.examplebase"
