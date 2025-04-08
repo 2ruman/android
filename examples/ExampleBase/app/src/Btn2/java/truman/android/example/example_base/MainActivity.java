@@ -1,4 +1,4 @@
-package truman.android.example.examplebase;
+package truman.android.example.example_base;
 
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -6,7 +6,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import truman.android.example.examplebase.databinding.ActivityMainBinding;
+import truman.android.example.example_base.databinding.ActivityMainBinding;
 
 /**
  * Author  : Truman
