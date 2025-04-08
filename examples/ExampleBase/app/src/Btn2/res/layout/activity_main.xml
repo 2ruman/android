@@ -18,6 +18,7 @@
             android:layout_weight="8"
             android:gravity="bottom"
             android:scrollbars="vertical"
+            android:lineSpacingExtra="4dp"
             android:text="Hello, my friend!\n" />
 
         <Button
