@@ -1,4 +1,4 @@
-package truman.android.example.examplebase;
+package truman.android.example.example_base;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import truman.android.example.examplebase.databinding.ActivityMainBinding;
+import truman.android.example.example_base.databinding.ActivityMainBinding;
 
 /**
  * Author  : Truman

@@ -1,4 +1,4 @@
-package truman.android.example.examplebase;
+package truman.android.example.example_base;
 
 import java.lang.ref.WeakReference;
 
