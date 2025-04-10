@@ -9,6 +9,7 @@ import android.content.pm.ServiceInfo;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -36,8 +37,6 @@ public class TbService extends Service {
 
         tbServiceNotification = new TbServiceNotification(getApplicationContext(), TbService.class);
         tbServiceNotification.setLinkedActivityClass(MainActivity.class);
-
-        initViews();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -122,8 +121,10 @@ public class TbService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand()");
 
-        becomeForeground();
-
+        if (Settings.canDrawOverlays(this)) {
+            becomeForeground();
+            initViews();
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 

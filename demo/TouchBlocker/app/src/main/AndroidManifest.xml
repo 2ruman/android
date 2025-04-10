@@ -22,11 +22,25 @@
             android:foregroundServiceType="shortService">
         </service>
 
+        <service
+            android:name=".TbTileService"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@android:drawable/star_big_on"
+            android:label="Touch BLocker"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
