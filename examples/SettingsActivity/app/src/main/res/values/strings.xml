@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Settings Activity</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="network_header">Network</string>
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Network Preferences -->
+    <string name="server_address_title">Server Address</string>
+    <string name="server_port_title">Server Port</string>
+    <string name="enable_tls_title">Enable TLS</string>
+    <string name="enable_tls_summery_on">Encrypt network data</string>
+    <string name="enable_tls_summery_off">Do not encrypt network data</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="settings">Settings</string>
+</resources>
