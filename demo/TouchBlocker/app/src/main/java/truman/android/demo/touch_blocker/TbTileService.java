@@ -1,6 +1,7 @@
 package truman.android.demo.touch_blocker;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
@@ -31,7 +32,6 @@ public class TbTileService extends TileService {
 
     @SuppressLint("StartActivityAndCollapseDeprecated")
     public void onClick() {
-        Log.d(TAG, "onClick(5) - is secure? " + isSecure());
         if (isLocked()) {
             Log.d(TAG, "Service not operable while locked");
             return;
@@ -51,6 +51,7 @@ public class TbTileService extends TileService {
             }
         } else {
             startService();
+            collapseQuickSettingsPanel();
         }
     }
 
@@ -63,5 +64,16 @@ public class TbTileService extends TileService {
     private void startService() {
         Intent intent = new Intent(getApplicationContext(), TbService.class);
         startService(intent);
+    }
+
+    private void collapseQuickSettingsPanel() {
+        showAndDismissEmptyDialog();
+    }
+
+    private void showAndDismissEmptyDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.empty_dialog);
+        showDialog(dialog);
+        dialog.dismiss();
     }
 }

@@ -1,5 +1,7 @@
 package truman.android.demo.touch_blocker;
 
+import static android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE;
+
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Service;
@@ -15,6 +17,8 @@ import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 
