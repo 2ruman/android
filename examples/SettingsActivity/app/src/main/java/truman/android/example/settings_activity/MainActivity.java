@@ -1,19 +1,30 @@
 package truman.android.example.settings_activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.preference.PreferenceManager;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName() + ".2ruman";
+
+    private ActivityResultLauncher<Intent> settingsActivityLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +36,20 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        initVars();
         initActionBar();
+    }
+
+    private void initVars() {
+        settingsActivityLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result.getResultCode() == MainActivity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            onPreferenceChanged(data.getStringArrayListExtra("keys"));
+                        }
+                    }
+        });
     }
 
     private void initActionBar() {
@@ -36,6 +59,30 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setIcon(R.drawable.ic_android);
             actionBar.setTitle("   Main");
         }
+    }
+
+    private void onPreferenceChanged(ArrayList<String> keys) {
+        if (keys == null) {
+            return;
+        }
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        for (String key : keys) {
+            onPreferenceChanged(sp, key);
+        }
+    }
+
+    private void onPreferenceChanged(SharedPreferences sp, String key) {
+        Object valueObj = sp.getAll().get(key);
+        String valueStr;
+        if (valueObj instanceof String) {
+            valueStr = String.valueOf(valueObj);
+        } else if (valueObj instanceof Boolean) {
+            valueStr = String.valueOf(valueObj);
+        } else {
+            valueStr = "Not Found";
+        }
+        Log.d(TAG, "onPreferenceChanged - Changed preference = " +
+                "[" + key + ", " + valueStr + "]");
     }
 
     @Override
@@ -57,6 +104,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void startSettingsActivity() {
         Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        settingsActivityLauncher.launch(intent);
     }
 }
