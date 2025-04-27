@@ -10,6 +10,7 @@
     <!-- Network Preferences -->
     <string name="server_address_title">Server Address</string>
     <string name="server_port_title">Server Port</string>
+    <string name="server_port_dialog_title">Enter server port number</string>
     <string name="enable_tls_title">Enable TLS</string>
     <string name="enable_tls_summery_on">Encrypt network data</string>
     <string name="enable_tls_summery_off">Do not encrypt network data</string>

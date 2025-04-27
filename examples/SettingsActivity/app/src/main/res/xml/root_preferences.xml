@@ -12,6 +12,7 @@
             app:key="server_port"
             app:title="@string/server_port_title"
             app:defaultValue="12345"
+            app:dialogTitle="@string/server_port_dialog_title"
             app:useSimpleSummaryProvider="true" />
 
         <CheckBoxPreference
