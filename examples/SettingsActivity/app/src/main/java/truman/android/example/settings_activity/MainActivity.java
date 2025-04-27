@@ -2,6 +2,7 @@ package truman.android.example.settings_activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -88,6 +89,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem item = menu.findItem(R.id.menu_settings);
+        Drawable icon = item.getIcon();
+        if (icon != null) {
+            icon.mutate();
+            icon.setTintList(null);
+        }
         return true;
     }
 
