@@ -6,11 +6,13 @@ $ adb shell dumpsys activity activities | grep -A10 topResumedActivity | grep "p
 ```
 
 
-## Check Application ID (App's UID)
+## Get Application ID (App's UID)
 
 ```
+# of the package: Method #1
 $ adb shell dumpsys package [PACKAGE_NAME] | grep appId
 
+# of the package: Method #2
 $ adb shell pm dump [PACKAGE_NAME] | grep appId
 ```
 
