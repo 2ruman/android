@@ -1,3 +1,11 @@
+## Get Package Name
+
+### of currently top-resumed activity
+
+```
+$ adb shell dumpsys activity activities | grep -A10 topResumedActivity | grep "packageName=" | awk -F'[[:space:]]+|packageName=' '{print $3}'
+```
+
 
 ## Check Application ID (App's UID)
 
