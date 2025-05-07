@@ -1,3 +1,11 @@
+## Get Installed APK Path
+
+```
+# By the package name
+$ adb shell dumpsys package [PACKAGE_NAME] | grep "path: " | head -n 1 | cut -d"path: " -F2
+```
+
+
 ## Get Package Name
 
 ```
@@ -9,16 +17,16 @@ $ adb shell dumpsys activity activities | grep -A10 topResumedActivity | grep "p
 ## Get Process Name
 ```
 # Of currently top-resumed activity
-adb shell dumpsys activity activities | grep -A10 topResumedActivity | grep "processName=" | cut -d"processName=" -F2
+$ adb shell dumpsys activity activities | grep -A10 topResumedActivity | grep "processName=" | cut -d"processName=" -F2
 ```
 
 ## Get Application ID (App's UID)
 
 ```
-# By the package: Method #1
+# By the package name: Method #1
 $ adb shell dumpsys package [PACKAGE_NAME] | grep appId
 
-# By the package: Method #2
+# By the package name: Method #2
 $ adb shell pm dump [PACKAGE_NAME] | grep appId
 ```
 
