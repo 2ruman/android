@@ -1,18 +1,24 @@
 ## Get Package Name
 
 ```
-# of currently top-resumed activity
+# Of currently top-resumed activity
 $ adb shell dumpsys activity activities | grep -A10 topResumedActivity | grep "packageName=" | awk -F'[[:space:]]+|packageName=' '{print $3}'
 ```
 
 
+## Get Process Name
+```
+# Of currently top-resumed activity
+adb shell dumpsys activity activities | grep -A10 topResumedActivity | grep "processName=" | cut -d"processName=" -F2
+```
+
 ## Get Application ID (App's UID)
 
 ```
-# of the package: Method #1
+# By the package: Method #1
 $ adb shell dumpsys package [PACKAGE_NAME] | grep appId
 
-# of the package: Method #2
+# By the package: Method #2
 $ adb shell pm dump [PACKAGE_NAME] | grep appId
 ```
 
