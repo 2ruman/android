@@ -5,6 +5,12 @@
 $ adb shell dumpsys package [PACKAGE_NAME] | grep "path: " | head -n 1 | cut -d"path: " -F2
 ```
 
+## Get Activity Component Name
+
+```
+# Of currently top-resumed activity
+$ adb shell dumpsys activity activities | grep topResumedActivity= | awk '{print $3}'
+```
 
 ## Get Package Name
 
