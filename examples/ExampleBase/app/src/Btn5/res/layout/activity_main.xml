@@ -28,23 +28,28 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
+        android:paddingHorizontal="1dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btn_line_2"
         app:layout_constraintHeight_percent="0.1">
 
         <Button
+            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/btn_start"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginHorizontal="1dp"
             android:text="Start" />
 
         <Button
+            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/btn_stop"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginHorizontal="1dp"
             android:text="Stop" />
     </LinearLayout>
 
@@ -53,23 +58,28 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
+        android:paddingHorizontal="1dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btn_line_3"
         app:layout_constraintHeight_percent="0.1">
 
         <Button
+            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/btn_setup"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginHorizontal="1dp"
             android:text="Setup" />
 
         <Button
+            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/btn_reset"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginHorizontal="1dp"
             android:text="Reset" />
     </LinearLayout>
 
@@ -78,16 +88,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
+        android:paddingHorizontal="1dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent="0.1">
 
         <Button
+            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/btn_run"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginHorizontal="1dp"
             android:text="Run" />
     </LinearLayout>
 
