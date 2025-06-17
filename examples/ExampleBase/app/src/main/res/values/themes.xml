@@ -3,6 +3,8 @@
     <style name="Base.Theme.ExampleBase" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@drawable/img_example</item>
+        <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="31">@integer/material_motion_duration_long_1</item>
     </style>
 
     <style name="Theme.ExampleBase" parent="Base.Theme.ExampleBase" />
