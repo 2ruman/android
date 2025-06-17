@@ -10,8 +10,8 @@ android {
         applicationId "truman.android.example.example_base"
         minSdk 29
         targetSdk 35
-        versionCode 5
-        versionName "1.2.5"
+        versionCode 6
+        versionName "1.3.0"
     }
 
     buildFeatures {
@@ -45,6 +45,10 @@ android {
         Btn5 {
             dimension "composition"
             versionNameSuffix '-btn5'
+        }
+        IconBtn8 {
+            dimension "composition"
+            versionNameSuffix '-icon-btn5'
         }
     }
 }
