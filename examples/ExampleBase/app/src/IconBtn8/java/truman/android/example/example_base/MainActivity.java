@@ -1,8 +1,12 @@
 package truman.android.example.example_base;
 
+import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -92,6 +96,33 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
     private void test() {
         Log.d(TAG, "test() - Inside");
         println("Test");
+        showImage();
+    }
+
+    private void showImage() {
+        enableFrame();
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img_example);
+        binding.ivFrame.setImageBitmap(bitmap);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void enableFrame() {
+        binding.ivFrame.setClickable(true);
+        binding.ivFrame.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                hideImage();
+            }
+            return false;
+        });
+    }
+
+    private void hideImage() {
+        disableFrame();
+        binding.ivFrame.setImageBitmap(null);
+    }
+
+    private void disableFrame() {
+        binding.ivFrame.setClickable(false);
     }
 
     @Override
