@@ -53,3 +53,12 @@ $ adb shell
 
 $ PID=$(ps -A | grep [PACKAGE_NAME_HINT] | head -n 1 | awk '{print $2}'); echo $PID # Extend command
 ```
+
+## Network Packet Redirection ('adb root' required)
+
+###### _Add a rule to PREROUTING chain, which makes TCP packets that have destination port as 80 go to 8080 port._
+
+```
+$ adb root; adb shell
+# iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
+```
