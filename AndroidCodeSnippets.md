@@ -2,6 +2,7 @@
 
 ### Contents
 + [Date / Time](#date--time)
++ [File](#file)
 + [Process](#process)
 + [Screen / View](#screen--view)
 + [System](#system)
@@ -57,6 +58,21 @@ String formattedBootTime2 = getFormattedTime((bootTimeNanos/1000000));
 
 String formattedCurrTime1 = getFormattedTime(currentTime);
 String formattedCurrTime2 = getFormattedTime((currentTimeNanos/1000000));
+```
+
+## File
+
+### Create and Get a Temporary Directory in Public Storage
+
+```java
+ public static File getTempDirectoryInPublic() {
+     File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+             "tmp_" + System.currentTimeMillis());
+     if (!dir.exists() && !dir.mkdirs()) {
+         return null;
+     }
+     return dir;
+ }
 ```
 
 ## Process
