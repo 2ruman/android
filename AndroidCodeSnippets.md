@@ -65,6 +65,11 @@ String formattedCurrTime2 = getFormattedTime((currentTimeNanos/1000000));
 ### Create and Get a Temporary Directory in Public Storage
 
 ```java
+import android.os.Environment;
+import java.io.File;
+
+(...)
+
  public static File getTempDirectoryInPublic() {
      File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
              "tmp_" + System.currentTimeMillis());
