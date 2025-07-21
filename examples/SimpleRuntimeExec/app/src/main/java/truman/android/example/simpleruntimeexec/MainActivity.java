@@ -54,10 +54,13 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
 
     private void test1() {
         Log.d(TAG, "test1() - Inside");
+        println(ShellCommand.execute("getprop"));
+
     }
 
     private void test2() {
         Log.d(TAG, "test2() - Inside");
+        println("Kernel Version : " + Utils.getKernelVersion());
     }
 
     private void run() {
