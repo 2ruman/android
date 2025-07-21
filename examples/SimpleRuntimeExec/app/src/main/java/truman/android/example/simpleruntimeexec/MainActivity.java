@@ -1,139 +1,91 @@
 package truman.android.example.simpleruntimeexec;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import java.lang.ref.WeakReference;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity {
+import truman.android.example.simpleruntimeexec.databinding.ActivityMainBinding;
+
+/**
+ * Author  : Truman
+ * Contact : truman.t.kim@gmail.com
+ */
+public class MainActivity extends AppCompatActivity implements Ui.Out {
 
     private static final String TAG_SUFFIX = ".2ruman"; // For grep
     private static final String TAG = "MainActivity" +  TAG_SUFFIX;
-
     private static final String SHELL_COMMAND_EXAMPLE = "cat /proc/meminfo";
 
-    private Button mBtnRun;
-    private Button mBtnReset;
-    private TextView mTvStatus;
-    private EditText mEtCommand;
-
-    private final Handler mUIHandler = new UIHandler(this);
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        EdgeToEdge.enable(this);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         Log.d(TAG, "onCreate()");
 
-        mBtnRun = findViewById(R.id.btn_run);
-        mBtnRun.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                run();
-            }
-        });
-        mBtnReset = findViewById(R.id.btn_reset);
-        mBtnReset.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reset();
-            }
-        });
-        mTvStatus = findViewById(R.id.tv_status);
-        mTvStatus.setMovementMethod(new ScrollingMovementMethod());
-        mEtCommand = findViewById(R.id.et_cmd);
-        mEtCommand.requestFocus();
-        mEtCommand.setText(SHELL_COMMAND_EXAMPLE);
+        initViews();
+        Ui.setOut(this);
     }
 
-    /* Main code for ShellCommand implementation { */
-    final ShellCommandCallback mCallback = new ShellCommandCallback() {
-        @Override
-        public void onReadLine(String line) {
-            appendTv(line + "\n");
-        }
-    };
+    private void initViews() {
+        binding.btnTest1.setOnClickListener((v) -> test1());
+        binding.btnTest2.setOnClickListener((v) -> test2());
+        binding.btnRun.setOnClickListener((v) -> run());
+        binding.btnReset.setOnClickListener((v) -> reset());
+        binding.tvStatus.setMovementMethod(new ScrollingMovementMethod());
+        binding.etCmd.requestFocus();
+        binding.etCmd.setText(SHELL_COMMAND_EXAMPLE);
+    }
+
+    private void test1() {
+        Log.d(TAG, "test1() - Inside");
+    }
+
+    private void test2() {
+        Log.d(TAG, "test2() - Inside");
+    }
 
     private void run() {
         Log.d(TAG, "run() - Inside");
-        ShellCommand.execute(mEtCommand.getText().toString(), mCallback);
+        ShellCommand.execute(binding.etCmd.getText().toString(), this::println);
     }
-    /* } Main code for ShellCommand implementation */
 
     private void reset() {
         Log.d(TAG, "reset() - Inside");
-        updateTv("");
+        clear();
     }
 
-    private void updateTv(String text) {
-        mUIHandler.sendMessage(
-                mUIHandler.obtainMessage(UIHandler.MSG_UPDATE_TV, text));
+    @Override
+    public void print(String s) {
+        runOnUiThread(() -> binding.tvStatus.append(nullSafe(s)));
     }
 
-    private void appendTv(String text) {
-        mUIHandler.sendMessage(
-                mUIHandler.obtainMessage(UIHandler.MSG_APPEND_TV, text));
+    @Override
+    public void println(String s) {
+        runOnUiThread(() -> binding.tvStatus.append(nullSafe(s) + System.lineSeparator()));
     }
 
-    private void handleUpdateTv(String text) {
-        if (text == null)
-            return;
-        mTvStatus.setText(text);
+    @Override
+    public void clear() {
+        runOnUiThread(() -> binding.tvStatus.setText(""));
     }
 
-    private void handleAppendTv(String text) {
-        if (text == null)
-            return;
-        mTvStatus.append(text);
-    }
-
-    private static class UIHandler extends Handler {
-        private final String TAG = "UIHandler" + TAG_SUFFIX;
-        private final WeakReference<MainActivity> mActivity;
-
-        private static final int MSG_UPDATE_TV = 1;
-        private static final int MSG_APPEND_TV = 2;
-
-        UIHandler(MainActivity activity) {
-            mActivity = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            MainActivity activity = mActivity.get();
-            if (activity == null) {
-                Log.e(TAG, "MainActivity is not available");
-                return;
-            }
-
-            switch (msg.what) {
-                case MSG_UPDATE_TV: {
-                    String text = msg.obj == null ?
-                            "null" : msg.obj.toString();
-                    activity.handleUpdateTv(text);
-                    break;
-                }
-                case MSG_APPEND_TV: {
-                    String text = msg.obj == null ?
-                            "null" : msg.obj.toString();
-                    activity.handleAppendTv(text);
-                    break;
-                }
-                default:
-                    Log.e(TAG, "Invalid message");
-                    break;
-            }
-        }
+    private static String nullSafe(String s) {
+        return s != null ? s : "";
     }
 }
