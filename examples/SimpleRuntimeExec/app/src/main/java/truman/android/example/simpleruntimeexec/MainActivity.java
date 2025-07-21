@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /* Main code for ShellCommand implementation { */
-    final IShellCommandCallback mCallback = new IShellCommandCallback() {
+    final ShellCommandCallback mCallback = new ShellCommandCallback() {
         @Override
         public void onReadLine(String line) {
             appendTv(line + "\n");

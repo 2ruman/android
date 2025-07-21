@@ -10,7 +10,7 @@ public class ShellCommand {
 
     public static String EMPTY = "";
 
-    public static void execute(String command, IShellCommandCallback callback) {
+    public static void execute(String command, ShellCommandCallback callback) {
         if (command == null) {
             return;
         }
@@ -46,7 +46,7 @@ public class ShellCommand {
         return filtered;
     }
 
-    private static void executeInternal(String command, IShellCommandCallback callback) {
+    private static void executeInternal(String command, ShellCommandCallback callback) {
         try {
             Process proc = Runtime.getRuntime().exec(command);
             String line;

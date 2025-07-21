@@ -1,5 +1,5 @@
 package truman.android.example.simpleruntimeexec;
 
-public interface IShellCommandCallback {
+public interface ShellCommandCallback {
     void onReadLine(String line);
 }
