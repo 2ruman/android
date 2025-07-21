@@ -15,15 +15,12 @@ import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 
-/**
- * Author  : Truman
- * Contact : truman.t.kim@gmail.com
- * Version : 1.0.0
- */
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG_SUFFIX = ".2ruman"; // For grep
     private static final String TAG = "MainActivity" +  TAG_SUFFIX;
+
+    private static final String SHELL_COMMAND_EXAMPLE = "cat /proc/meminfo";
 
     private Button mBtnRun;
     private Button mBtnReset;
@@ -57,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         mTvStatus.setMovementMethod(new ScrollingMovementMethod());
         mEtCommand = findViewById(R.id.et_cmd);
         mEtCommand.requestFocus();
-        mEtCommand.setText(ShellCommand.SHELL_COMMAND_EXAMPLE);
+        mEtCommand.setText(SHELL_COMMAND_EXAMPLE);
     }
 
     /* Main code for ShellCommand implementation { */
