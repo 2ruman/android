@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.DummyProcessGen"
+        tools:targetApi="31">
+        <service
+            android:name=".svc.DummyService0"
+            android:enabled="true"
+            android:exported="true"
+            android:process="truman.DummyService0" />
+        <service
+            android:name=".svc.DummyService1"
+            android:enabled="true"
+            android:exported="true"
+            android:process="truman.DummyService1" />
+        <service
+            android:name=".svc.DummyService2"
+            android:enabled="true"
+            android:exported="true"
+            android:process="truman.DummyService2" />
+        <service
+            android:name=".svc.DummyService3"
+            android:enabled="true"
+            android:exported="true"
+            android:process="truman.DummyService3" />
+        <service
+            android:name=".svc.DummyService4"
+            android:enabled="true"
+            android:exported="true"
+            android:process="truman.DummyService4" />
+        <service
+            android:name=".svc.DummyService5"
+            android:enabled="true"
+            android:exported="true"
+            android:process="truman.DummyService5" />
+        <service
+            android:name=".svc.DummyService6"
+            android:enabled="true"
+            android:exported="true"
+            android:process="truman.DummyService6" />
+        <service
+            android:name=".svc.DummyService7"
+            android:enabled="true"
+            android:exported="true"
+            android:process="truman.DummyService7" />
+        <service
+            android:name=".svc.DummyService8"
+            android:enabled="true"
+            android:exported="true"
+            android:process="truman.DummyService8" />
+        <service
+            android:name=".svc.DummyService9"
+            android:enabled="true"
+            android:exported="true"
+            android:process="truman.DummyService9" />
+
+        <activity
+            android:name=".act.DummyActivity0"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:process="truman.DummyActivity0" />
+        <activity
+            android:name=".act.DummyActivity1"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:process="truman.DummyActivity1" />
+        <activity
+            android:name=".act.DummyActivity2"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:process="truman.DummyActivity2" />
+        <activity
+            android:name=".act.DummyActivity3"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:process="truman.DummyActivity3" />
+        <activity
+            android:name=".act.DummyActivity4"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:process="truman.DummyActivity4" />
+        <activity
+            android:name=".act.DummyActivity5"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:process="truman.DummyActivity5" />
+        <activity
+            android:name=".act.DummyActivity6"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:process="truman.DummyActivity6" />
+        <activity
+            android:name=".act.DummyActivity7"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:process="truman.DummyActivity7" />
+        <activity
+            android:name=".act.DummyActivity8"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:process="truman.DummyActivity8" />
+        <activity
+            android:name=".act.DummyActivity9"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:process="truman.DummyActivity9" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
