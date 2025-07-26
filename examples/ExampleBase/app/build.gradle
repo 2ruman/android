@@ -11,7 +11,7 @@ android {
         minSdk 29
         targetSdk 35
         versionCode 6
-        versionName "1.4.0"
+        versionName "1.5.0"
     }
 
     buildFeatures {
@@ -64,6 +64,10 @@ android {
         IconBtn8 {
             dimension "composition"
             versionNameSuffix '-icon-btn5'
+        }
+        SimpDyn {
+            dimension "composition"
+            versionNameSuffix '-simp-dyn'
         }
     }
 }
