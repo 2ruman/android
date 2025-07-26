@@ -79,3 +79,16 @@ dependencies {
     implementation libs.activity
     implementation libs.constraintlayout
 }
+
+tasks.register('printProductFlavors') {
+    group = "truman"
+    description = "Prints all product flavors"
+
+    doLast {
+        android.productFlavors.each { flavor ->
+            println "Flavor: ${flavor.name}"
+            println "Dimension: ${flavor.dimension}"
+            println "------------------------------"
+        }
+    }
+}
