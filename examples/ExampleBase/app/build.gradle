@@ -11,7 +11,7 @@ android {
         minSdk 29
         targetSdk 35
         versionCode 6
-        versionName "1.5.0"
+        versionName "1.6.0"
     }
 
     buildFeatures {
@@ -68,6 +68,10 @@ android {
         SimpDyn {
             dimension "composition"
             versionNameSuffix '-simp-dyn'
+        }
+        Term {
+            dimension "composition"
+            versionNameSuffix '-term'
         }
     }
 }
