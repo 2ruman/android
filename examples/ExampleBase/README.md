@@ -1,7 +1,7 @@
 
 # Example Base
 
-To demonstrate an application, there should be certain interaction with the demonstrator. The interface in between could be quite simple or have widgets commonly used. This project provides a collection of flavored applications composed of straightforward interface, and also shows codes for easy reference so that developers can save their time starting off from scratch.
+To demonstrate an application, there should be certain interaction with the demonstrator. The interface in between could be quite simple or mostly have widgets commonly used. This project provides developers with a collection of flavored applications which are composed of straightforward views, and also shows codes and resources for easy reference so that developers can save their time starting off a new project from scratch.
 
 ## Flavors
  - __Btn2__ : Compose views with 2 buttons
