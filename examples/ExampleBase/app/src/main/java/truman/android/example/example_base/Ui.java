@@ -10,11 +10,23 @@ public final class Ui {
         void print(String s);
         void println(String s);
         void clear();
+
+        default void print(String s, int color, int style) {}
+        default void println() {
+            println("");
+        }
     }
 
     public static void setOut(Out o) {
         synchronized (Ui.class) {
             out = new WeakReference<>(o);
+        }
+    }
+
+    public static void print(String s, int color, int style) {
+        synchronized (Ui.class) {
+            Out o = out.get();
+            if (o != null) o.print(s, color, style);
         }
     }
 
@@ -29,6 +41,13 @@ public final class Ui {
         synchronized (Ui.class) {
             Out o = out.get();
             if (o != null) o.println(s);
+        }
+    }
+
+    public static void println() {
+        synchronized (Ui.class) {
+            Out o = out.get();
+            if (o != null) o.println();
         }
     }
 
