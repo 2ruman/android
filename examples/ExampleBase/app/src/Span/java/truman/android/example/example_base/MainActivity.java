@@ -8,6 +8,7 @@ import android.text.Spanned;
 import android.text.method.ScrollingMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
@@ -68,12 +69,20 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
         printStyled("BOLD_ITALIC", Typeface.BOLD_ITALIC);
         println();
 
+        print("This is ");
+        printUnderlined("UNDERLINED");
+        println();
+
         Ui.print("This is ");
-        Ui.print("Green Italic", Color.GREEN, Typeface.ITALIC);
+        Ui.print("GREEN_ITALIC", Color.GREEN, Typeface.ITALIC, false);
         Ui.println();
 
         print("This is ");
-        Ui.print("BLUE_BOLD", Color.BLUE, Typeface.BOLD);
+        Ui.print("BLUE_BOLD", Color.BLUE, Typeface.BOLD, false);
+        println();
+
+        print("This is ");
+        Ui.print("MAGENTA_BOLD_ITALIC_UNDERLINED", Color.MAGENTA, Typeface.BOLD_ITALIC, true);
         println();
     }
 
@@ -83,15 +92,19 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
     }
 
     private void printColored(String s, int color) {
-        print(s, color, Typeface.NORMAL);
+        print(s, color, Typeface.NORMAL, false);
     }
 
     private void printStyled(String s, int style) {
-        print(s, Color.BLACK, style);
+        print(s, Color.BLACK, style, false);
+    }
+
+    private void printUnderlined(String s) {
+        print(s, Color.BLACK, Typeface.NORMAL, true);
     }
 
     @Override
-    public void print(String s, int color, int style) {
+    public void print(String s, int color, int style, boolean underline) {
         if (s == null || s.isEmpty()) {
             return;
         }
@@ -100,6 +113,10 @@ public class MainActivity extends AppCompatActivity implements Ui.Out {
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         ssb.setSpan(new ForegroundColorSpan(color), 0, s.length(),
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if (underline) {
+            ssb.setSpan(new UnderlineSpan(), 0, s.length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
         runOnUiThread(() -> binding.tvStatus.append(ssb));
     }
 

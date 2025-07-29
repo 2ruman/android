@@ -11,7 +11,7 @@ public final class Ui {
         void println(String s);
         void clear();
 
-        default void print(String s, int color, int style) {}
+        default void print(String s, int color, int style, boolean underlined) {}
         default void println() {
             println("");
         }
@@ -23,10 +23,10 @@ public final class Ui {
         }
     }
 
-    public static void print(String s, int color, int style) {
+    public static void print(String s, int color, int style, boolean underlined) {
         synchronized (Ui.class) {
             Out o = out.get();
-            if (o != null) o.print(s, color, style);
+            if (o != null) o.print(s, color, style, underlined);
         }
     }
 
