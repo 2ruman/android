@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.RadioGroup;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -28,6 +29,25 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        ensurePermissions();
+        initViews();
+    }
+
+    private void ensurePermissions() {
+        if (BuildConfig.FLAVOR != "wm") {
+            return;
+        }
+        if (!TN.canDrawOverlays(this)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission Required")
+                    .setMessage("This app requires 'Display over other apps' permission to show notifications.")
+                    .setPositiveButton("Settings", (dialog, which) -> TN.requestOverlayPermission(this))
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        }
+    }
+
+    private void initViews() {
         RadioGroup rgMode = binding.rgMode;
         rgMode.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == binding.rbSlideUp.getId()) {
